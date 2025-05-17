@@ -1,0 +1,17 @@
+it\blacked\lifestealcore\managers\ConfigManager.class
+it\blacked\lifestealcore\managers\HeartItemManager.class
+it\blacked\lifestealcore\utils\ItemUtils.class
+it\blacked\lifestealcore\events\PlayerDeathListener.class
+it\blacked\lifestealcore\placeholders\LifeCoreExpansion.class
+it\blacked\lifestealcore\LifeCore.class
+it\blacked\lifestealcore\gui\BuyMenu.class
+it\blacked\lifestealcore\events\PlayerMoveListener.class
+it\blacked\lifestealcore\events\PlayerJoinQuitListener.class
+it\blacked\lifestealcore\commands\CommandTabCompleter.class
+it\blacked\lifestealcore\events\InventoryClickListener.class
+it\blacked\lifestealcore\commands\LifeCoreAdminCommand.class
+it\blacked\lifestealcore\managers\BanManager.class
+it\blacked\lifestealcore\gui\UnbanMenu.class
+it\blacked\lifestealcore\commands\LifeCoreCommand.class
+it\blacked\lifestealcore\managers\HeartManager.class
+it\blacked\lifestealcore\utils\TimeUtils.class

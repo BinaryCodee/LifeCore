@@ -1,0 +1,15 @@
+name: LifeCore
+version: '${project.version}'
+main: it.blacked.lifestealcore.LifeCore
+api-version: '1.21'
+depend: [Vault, PlaceholderAPI]
+authors: [blacked104]
+description: Lifesteal Core for Beffax
+api-version: '1.19'
+commands:
+  lifecore:
+    description: Main command for LifeCore
+    aliases: [lc]
+  lifecoreadmin:
+    description: Admin command for LifeCore
+    aliases: [lca]

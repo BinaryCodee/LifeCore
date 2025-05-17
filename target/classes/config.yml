@@ -1,0 +1,78 @@
+messages:
+  prefix: "&8[&c&lLifeCore&8] &r"
+  no_permission: "&cNon hai il permesso."
+  player_not_found: "&cGiocatore non trovato."
+  invalid_amount: "&cSpecifica un valore valido."
+  heart_added: "&aHai aggiunto con successo &c{amount} cuore(i) &aa &f{player}&a."
+  heart_removed: "&aHai rimosso con successo &c{amount} cuore(i) &aa &f{player}&a."
+  heart_list_player: "&f{player} &aha &c{hearts} cuore(i)&a."
+  heart_list_header: "&4&lCUORI &c&lGIOCATORI"
+  heart_list_format: "&8* &f{player} &c{hearts} cuore(i)"
+  heart_list_footer: ""
+  killer_heart_gained: "&aHai guadagnato &c1 cuore &auccidendo &f{victim}&a!"
+  victim_heart_lost: "&cHai perso &c1 cuore &cper essere stato ucciso da &f{killer}&c!"
+  suicide_warning: "&cAttenzione: Se ti uccidi altre {remaining} volte, verrai bannato!"
+  suicide_banned: "&cSei stato bannato per esserti ucciso troppe volte da solo!"
+  heart_bought: "&aHai acquistato con successo &c1 cuore&a!"
+  heart_redeemed: "&aHai riscattato con successo &c1 cuore&a!"
+  not_enough_money: "&cNon hai abbastanza soldi!"
+  banned_message: "&cSei stato bannato dal server per {time}!\n&ePuoi sbannarti usando &6/lifecore buy"
+  unbanned_message: "&aSei stato unbannato dalla lifesteal!"
+  unban_bought: "&aHai acquistato con successo l'unban! Ora puoi tornare a giocare."
+  no_hearts_remaining: "&cNon hai più cuori e sei stato bannato!"
+  max_hearts_reached: "&cHai raggiunto il numero massimo di cuori!"
+
+settings:
+  max_hearts: 20
+  default_hearts: 10
+  suicide_ban_count: 3
+  suicide_ban_time: 7d
+  death_ban_time: 4d
+  starting_hearts_after_unban: 6
+  enable_economy: true
+
+economy:
+  heart_price: 50000
+  unban_price: 150000
+
+gui:
+  buy_menu:
+    title: "&8Lifesteal Menu"
+    size: 27
+    unban_item:
+      name: "&b&lUnban Lifesteal"
+      material: "PAPER"
+      lore:
+        - "&7Clicca per aprire il Menu UnBan."
+        - "&7Costo: &6{unban_price}"
+      slot: 12
+    heart_item:
+      name: "&c&lAcquista Cuori"
+      material: "RED_DYE"
+      lore:
+        - "&7Clicca per acquistare un cuore."
+        - "&7Costo: &6{heart_price}"
+      slot: 14
+
+  unban_menu:
+    title: "&8Unban Menu"
+    size: 27
+    crystal_item:
+      name: "&b&lUnban"
+      material: "NETHER_STAR"
+      lore:
+        - "&7Clicca per acquistare l'unban."
+        - "&7Costo: &6{unban_price}"
+      slot: 13
+
+commands:
+  lifecore:
+    permission: "lifecore.use"
+    aliases:
+      - lc
+      - life
+  lifecoreadmin:
+    permission: "lifecoreadmin.use"
+    aliases:
+      - lca
+      - lifeadmin
