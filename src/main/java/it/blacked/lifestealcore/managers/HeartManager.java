@@ -33,7 +33,7 @@ public class HeartManager {
                 heartsFile.getParentFile().mkdirs();
                 heartsFile.createNewFile();
             } catch (IOException e) {
-                plugin.getLogger().severe("Could not create hearts.yml file!");
+                plugin.getLogger().severe("Impossibile creare il file hearts.yml!");
                 e.printStackTrace();
             }
         }
@@ -47,7 +47,7 @@ public class HeartManager {
                     int hearts = heartsConfig.getInt("hearts." + uuidStr);
                     playerHearts.put(uuid, hearts);
                 } catch (IllegalArgumentException e) {
-                    plugin.getLogger().warning("Invalid UUID in hearts.yml: " + uuidStr);
+                    plugin.getLogger().warning("UUID non valido nel file hearts.yml: " + uuidStr);
                 }
             }
         }
@@ -61,7 +61,7 @@ public class HeartManager {
         try {
             heartsConfig.save(heartsFile);
         } catch (IOException e) {
-            plugin.getLogger().severe("Could not save hearts.yml file!");
+            plugin.getLogger().severe("Impossibile salvare il file hearts.yml!");
             e.printStackTrace();
         }
     }
