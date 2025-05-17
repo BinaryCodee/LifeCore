@@ -59,7 +59,7 @@ Requires [PlaceholderAPI](https://www.spigotmc.org/resources/placeholderapi.6245
 ## Configuration ⚙️
 Edit `plugins/LifeCore/config.yml` to customize:
 
-### Settings // [config.yml][https://github.com/BinaryCodee/LifeCore/blob/main/src/main/resources/config.yml]
+### Settings // [config.yml](https://github.com/BinaryCodee/LifeCore/blob/main/src/main/resources/config.yml)
 ```yaml
 messages:
   prefix: "&8[&c&lLifeCore&8] &r"
