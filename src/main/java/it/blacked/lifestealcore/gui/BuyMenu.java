@@ -9,7 +9,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,7 +36,7 @@ public class BuyMenu {
         String unbanName = ChatColor.translateAlternateColorCodes('&', (String) unbanItemConfig.get("name"));
         Material unbanMaterial = Material.valueOf((String) unbanItemConfig.get("material"));
         List<String> unbanLore = (List<String>) unbanItemConfig.get("lore");
-        int unbanSlot = (int) unbanItemConfig.get("slot");
+        int unbanSlot = Integer.parseInt(unbanItemConfig.get("slot").toString());
 
         ItemStack unbanItem = new ItemStack(unbanMaterial);
         ItemMeta unbanMeta = unbanItem.getItemMeta();
@@ -56,7 +55,7 @@ public class BuyMenu {
         String heartName = ChatColor.translateAlternateColorCodes('&', (String) heartItemConfig.get("name"));
         Material heartMaterial = Material.valueOf((String) heartItemConfig.get("material"));
         List<String> heartLore = (List<String>) heartItemConfig.get("lore");
-        int heartSlot = (int) heartItemConfig.get("slot");
+        int heartSlot = Integer.parseInt(heartItemConfig.get("slot").toString());
 
         ItemStack heartItem = new ItemStack(heartMaterial);
         ItemMeta heartMeta = heartItem.getItemMeta();
@@ -69,7 +68,6 @@ public class BuyMenu {
 
         heartMeta.setLore(formattedHeartLore);
         heartItem.setItemMeta(heartMeta);
-
         inventory.setItem(heartSlot, heartItem);
     }
 

@@ -7,11 +7,14 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 public class PlayerMoveListener implements Listener {
 
     private final LifeCore plugin;
+    private final Set<UUID> notified = new HashSet<>();
 
     public PlayerMoveListener(LifeCore plugin) {
         this.plugin = plugin;
@@ -29,9 +32,16 @@ public class PlayerMoveListener implements Listener {
         UUID uuid = player.getUniqueId();
 
         if (plugin.getBanManager().isPlayerBanned(uuid)) {
-            String remainingTime = plugin.getBanManager().getRemainingBanTime(uuid);
-            player.sendMessage(plugin.getConfigManager().getMessage("banned_message")
-                    .replace("{time}", remainingTime));
+            event.setCancelled(true);
+
+            if (!notified.contains(uuid)) {
+                String remainingTime = plugin.getBanManager().getRemainingBanTime(uuid);
+                player.sendMessage(plugin.getConfigManager().getMessage("banned_message")
+                        .replace("{time}", remainingTime));
+                notified.add(uuid);
+            }
+        } else {
+            notified.remove(uuid);
         }
     }
 }

@@ -8,7 +8,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +24,6 @@ public class UnbanMenu {
 
         Map<String, Object> unbanMenuConfig = plugin.getConfigManager().getUnbanMenuConfig();
         String title = ChatColor.translateAlternateColorCodes('&', (String) unbanMenuConfig.get("title"));
-
         int size = (int) unbanMenuConfig.get("size");
         this.inventory = Bukkit.createInventory(null, size, title);
         setupItems();
@@ -37,7 +35,7 @@ public class UnbanMenu {
         String crystalName = ChatColor.translateAlternateColorCodes('&', (String) crystalItemConfig.get("name"));
         Material crystalMaterial = Material.valueOf((String) crystalItemConfig.get("material"));
         List<String> crystalLore = (List<String>) crystalItemConfig.get("lore");
-        int crystalSlot = (int) crystalItemConfig.get("slot");
+        int crystalSlot = Integer.parseInt(crystalItemConfig.get("slot").toString());
 
         ItemStack crystalItem = new ItemStack(crystalMaterial);
         ItemMeta crystalMeta = crystalItem.getItemMeta();
