@@ -49,12 +49,14 @@ public class LifeCoreCommand implements CommandExecutor {
     }
 
     private void sendHelpMessage(CommandSender sender) {
-        sender.sendMessage("§c§lLIFESTEAL §7- §e§lCOMANDI UTENTI");
-        sender.sendMessage("§c/lifecore help §8- §7Mostra tutti i comandi per gli utenti");
-        sender.sendMessage("§c/lifecore buy §8- §7Apri il menu della lifesteal");
+        sender.sendMessage("§cThis server is running LifestealCore v1.0 - By blacked10469");
+        sender.sendMessage("");
+        sender.sendMessage(plugin.getConfigManager().getMessage("help_header"));
+        sender.sendMessage(plugin.getConfigManager().getMessage("help_command"));
+        sender.sendMessage(plugin.getConfigManager().getMessage("buy_command"));
 
         if (sender.hasPermission(plugin.getConfigManager().getCommandPermission("lifecoreadmin"))) {
-            sender.sendMessage("§c/lifecoreadmin help §8- §7Mostra tutti i comandi per gli admin");
+            sender.sendMessage(plugin.getConfigManager().getMessage("admin_help_command"));
         }
 
         sender.sendMessage("");

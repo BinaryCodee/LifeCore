@@ -6,6 +6,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,13 +37,23 @@ public class LifeCoreAdminCommand implements CommandExecutor {
             return true;
         }
 
+        if (args[0].equalsIgnoreCase("ban")) {
+            handleBanCommand(sender, args);
+            return true;
+        }
+
+        if (args[0].equalsIgnoreCase("unban")) {
+            handleUnbanCommand(sender, args);
+            return true;
+        }
+
         sendHelpMessage(sender);
         return true;
     }
 
     private void handleHeartCommand(CommandSender sender, String[] args) {
         if (args.length < 2) {
-            sender.sendMessage("§c/lifecoreadmin heart [add/remove/list]");
+            sender.sendMessage(plugin.getConfigManager().getMessage("invalid_usage", Map.of("usage", "/lifecoreadmin heart [add/remove/list]")));
             return;
         }
 
@@ -56,7 +67,7 @@ public class LifeCoreAdminCommand implements CommandExecutor {
                 }
 
                 if (args.length < 4) {
-                    sender.sendMessage("§c/lifecoreadmin heart add [player] [amount]");
+                    sender.sendMessage(plugin.getConfigManager().getMessage("invalid_usage", Map.of("usage", "/lifecoreadmin heart add [player] [amount]")));
                     return;
                 }
 
@@ -84,7 +95,7 @@ public class LifeCoreAdminCommand implements CommandExecutor {
                 }
 
                 if (args.length < 4) {
-                    sender.sendMessage("§c/lifecoreadmin heart remove [player] [amount]");
+                    sender.sendMessage(plugin.getConfigManager().getMessage("invalid_usage", Map.of("usage", "/lifecoreadmin heart remove [player] [amount]")));
                     return;
                 }
 
@@ -112,7 +123,7 @@ public class LifeCoreAdminCommand implements CommandExecutor {
                 }
 
                 if (args.length < 3) {
-                    sender.sendMessage("§c/lifecoreadmin heart list [player/all]");
+                    sender.sendMessage(plugin.getConfigManager().getMessage("invalid_usage", Map.of("usage", "/lifecoreadmin heart list [player/all]")));
                     return;
                 }
 
@@ -147,17 +158,69 @@ public class LifeCoreAdminCommand implements CommandExecutor {
                 break;
 
             default:
-                sender.sendMessage("§c/lifecoreadmin heart [add/remove/list]");
+                sender.sendMessage(plugin.getConfigManager().getMessage("invalid_usage", Map.of("usage", "/lifecoreadmin heart [add/remove/list]")));
                 break;
         }
     }
+    private void handleBanCommand(CommandSender sender, String[] args) {
+        if (!sender.hasPermission(plugin.getConfigManager().getCommandPermission("lifecoreadmin_ban"))) {
+            sender.sendMessage(plugin.getConfigManager().getMessage("no_permission"));
+            return;
+        }
+
+        if (args.length < 3) {
+            sender.sendMessage(plugin.getConfigManager().getMessage("invalid_usage", Map.of("usage", "/lifecoreadmin ban <player> <time>")));
+            return;
+        }
+
+        OfflinePlayer target = Bukkit.getOfflinePlayer(args[1]);
+        if (target == null) {
+            sender.sendMessage(plugin.getConfigManager().getMessage("player_not_found"));
+            return;
+        }
+
+        String time = args[2];
+        plugin.getBanManager().banPlayer(target.getUniqueId(), time);
+
+        Map<String, String> placeholders = new HashMap<>();
+        placeholders.put("player", target.getName());
+        placeholders.put("time", time);
+        sender.sendMessage(plugin.getConfigManager().getMessage("ban_command_success", placeholders));
+    }
+
+    private void handleUnbanCommand(CommandSender sender, String[] args) {
+        if (!sender.hasPermission(plugin.getConfigManager().getCommandPermission("lifecoreadmin_unban"))) {
+            sender.sendMessage(plugin.getConfigManager().getMessage("no_permission"));
+            return;
+        }
+
+        if (args.length < 2) {
+            sender.sendMessage(plugin.getConfigManager().getMessage("invalid_usage", Map.of("usage", "/lifecoreadmin unban <player>")));
+            return;
+        }
+
+        OfflinePlayer target = Bukkit.getOfflinePlayer(args[1]);
+        if (target == null) {
+            sender.sendMessage(plugin.getConfigManager().getMessage("player_not_found"));
+            return;
+        }
+
+        plugin.getBanManager().unbanPlayer(target.getUniqueId());
+
+        Map<String, String> placeholders = new HashMap<>();
+        placeholders.put("player", target.getName());
+        sender.sendMessage(plugin.getConfigManager().getMessage("unban_command_success", placeholders));
+    }
 
     private void sendHelpMessage(CommandSender sender) {
-        sender.sendMessage("§c§lLIFESTEAL §7- §6§lCOMANDI ADMIN");
-        sender.sendMessage("§c/lifecoreadmin help §8- §7Mostra tutti i comandi per gli admin");
-        sender.sendMessage("§c/lifecoreadmin heart add [player] [amount] §8- §7Aggiungi i cuori ad un giocatore");
-        sender.sendMessage("§c/lifecoreadmin heart remove [player] [amount] §8- §7Rimuovi i cuori di un giocatore");
-        sender.sendMessage("§c/lifecoreadmin heart list [player/all] §8- §7Lista cuori di un giocatore o di tutti i giocatori");
+        sender.sendMessage("§cThis server is running LifestealCore v1.0 - By blacked10469");
         sender.sendMessage("");
+        sender.sendMessage(plugin.getConfigManager().getMessage("admin_help_header"));
+        sender.sendMessage(plugin.getConfigManager().getMessage("admin_help_heart_add"));
+        sender.sendMessage(plugin.getConfigManager().getMessage("admin_help_heart_remove"));
+        sender.sendMessage(plugin.getConfigManager().getMessage("admin_help_heart_list"));
+        sender.sendMessage(plugin.getConfigManager().getMessage("admin_help_ban"));
+        sender.sendMessage(plugin.getConfigManager().getMessage("admin_help_unban"));
+        sender.sendMessage(plugin.getConfigManager().getMessage("admin_help_footer"));
     }
 }

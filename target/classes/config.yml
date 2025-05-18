@@ -2,6 +2,7 @@ messages:
   prefix: "&8[&c&lLifeCore&8] &r"
   no_permission: "&cNon hai il permesso."
   player_not_found: "&cGiocatore non trovato."
+  invalid_usage: "&cUsa: {usage}"
   invalid_amount: "&cSpecifica un valore valido."
   heart_added: "&aHai aggiunto con successo &c{amount} cuore(i) &aa &f{player}&a."
   heart_removed: "&aHai rimosso con successo &c{amount} cuore(i) &aa &f{player}&a."
@@ -16,11 +17,27 @@ messages:
   heart_bought: "&aHai acquistato con successo &c1 cuore&a!"
   heart_redeemed: "&aHai riscattato con successo &c1 cuore&a!"
   not_enough_money: "&cNon hai abbastanza soldi!"
+  ban_command_success: "&aIl giocatore {player} è stato bannato per {time}."
+  unban_command_success: "&aIl giocatore {player} è stato unbannato."
   banned_message: "&cSei stato bannato dal server per {time}!\n&ePuoi sbannarti usando &6/lifecore buy"
   unbanned_message: "&aSei stato unbannato dalla lifesteal!"
   unban_bought: "&aHai acquistato con successo l'unban! Ora puoi tornare a giocare."
   no_hearts_remaining: "&cNon hai più cuori e sei stato bannato!"
   max_hearts_reached: "&cHai raggiunto il numero massimo di cuori!"
+  help_header: "&c&lLIFESTEAL &7- &e&lCOMANDI UTENTI"
+  help_command: "&c/lifecore help &8- &7Mostra tutti i comandi per gli utenti"
+  buy_command: "&c/lifecore buy &8- &7Apri il menu della lifesteal"
+  admin_help_header: "&c&lLIFESTEAL &7- &6&lCOMANDI ADMIN"
+  admin_help_heart_add: "&c/lifecoreadmin heart add [player] [amount] &8- &7Aggiungi i cuori ad un giocatore"
+  admin_help_heart_remove: "&c/lifecoreadmin heart remove [player] [amount] &8- &7Rimuovi i cuori di un giocatore"
+  admin_help_heart_list: "&c/lifecoreadmin heart list [player/all] &8- &7Lista cuori di un giocatore o di tutti i giocatori"
+  admin_help_ban: "&c/lifecoreadmin ban [player] [time] &8- &7Banna un giocatore per un determinato tempo"
+  admin_help_unban: "&c/lifecoreadmin unban [player] &8- &7Sbanna un giocatore"
+  admin_help_footer: ""
+  ban_help_header: "&c&lLIFESTEAL &7- &e&lCOMANDI BAN"
+  ban_help_ban: "&c/ban [player] [time] &8- &7Banna un giocatore per un determinato tempo"
+  ban_help_unban: "&c/unban [player] &8- &7Sbanna un giocatore"
+  ban_help_footer: ""
 
 settings:
   max_hearts: 20
@@ -71,8 +88,30 @@ commands:
     aliases:
       - lc
       - life
+  lifecore_buy:
+    permission: "lifecore.buy"
+    aliases:
+      - lcbuy
+      - lifebuy
+  lifecore_help:
+    permission: "lifecore.help"
+    aliases:
+      - lchelp
+      - lifehelp
   lifecoreadmin:
     permission: "lifecoreadmin.use"
     aliases:
       - lca
       - lifeadmin
+  lifecoreadmin_help:
+    permission: "lifecoreadmin.help"
+  lifecoreadmin_heart_add:
+    permission: "lifecoreadmin.heart.add"
+  lifecoreadmin_heart_remove:
+    permission: "lifecoreadmin.heart.remove"
+  lifecoreadmin_heart_list:
+    permission: "lifecoreadmin.heart.list"
+  lifecoreadmin_ban:
+    permission: "lifecoreadmin.ban"
+  lifecoreadmin_unban:
+    permission: "lifecoreadmin.unban"

@@ -22,14 +22,19 @@ public class PlayerMoveListener implements Listener {
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerMove(PlayerMoveEvent event) {
-        if (event.getFrom().getBlockX() == event.getTo().getBlockX() &&
-                event.getFrom().getBlockY() == event.getTo().getBlockY() &&
-                event.getFrom().getBlockZ() == event.getTo().getBlockZ()) {
-            return;
-        }
-
         Player player = event.getPlayer();
         UUID uuid = player.getUniqueId();
+
+        if (plugin.getBanManager().isPlayerBanned(uuid)) {
+            if (event.getFrom().getBlockX() == event.getTo().getBlockX() &&
+                    event.getFrom().getBlockY() == event.getTo().getBlockY() &&
+                    event.getFrom().getBlockZ() == event.getTo().getBlockZ()) {
+                event.setCancelled(true);
+            } else {
+                event.setCancelled(false);
+            }
+            return;
+        }
 
         if (plugin.getBanManager().isPlayerBanned(uuid)) {
             event.setCancelled(true);
@@ -39,9 +44,11 @@ public class PlayerMoveListener implements Listener {
                 player.sendMessage(plugin.getConfigManager().getMessage("banned_message")
                         .replace("{time}", remainingTime));
                 notified.add(uuid);
+                event.setCancelled(true);
             }
         } else {
             notified.remove(uuid);
+            event.setCancelled(false);
         }
     }
 }

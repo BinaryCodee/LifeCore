@@ -75,14 +75,6 @@ public class HeartManager {
         updatePlayerMaxHealth(uuid);
     }
 
-    public void addPlayerHearts(UUID uuid, int amount) {
-        int currentHearts = getPlayerHearts(uuid);
-        int maxHearts = plugin.getConfigManager().getMaxHearts();
-
-        int newHearts = Math.min(currentHearts + amount, maxHearts);
-        setPlayerHearts(uuid, newHearts);
-    }
-
     public void removePlayerHearts(UUID uuid, int amount) {
         int currentHearts = getPlayerHearts(uuid);
         int newHearts = Math.max(currentHearts - amount, 0);
@@ -105,6 +97,18 @@ public class HeartManager {
     public void updateAllPlayers() {
         for (Player player : Bukkit.getOnlinePlayers()) {
             updatePlayerMaxHealth(player.getUniqueId());
+        }
+    }
+
+    public void addPlayerHearts(UUID uuid, int amount) {
+        int currentHearts = getPlayerHearts(uuid);
+        int maxHearts = plugin.getConfigManager().getMaxHearts();
+
+        int newHearts = Math.min(currentHearts + amount, maxHearts);
+        setPlayerHearts(uuid, newHearts);
+
+        if (plugin.getBanManager().isPlayerBanned(uuid)) {
+            plugin.getBanManager().unbanPlayer(uuid);
         }
     }
 
