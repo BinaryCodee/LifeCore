@@ -4,6 +4,7 @@ import it.blacked.lifestealcore.commands.LifeCoreAdminCommand;
 import it.blacked.lifestealcore.commands.LifeCoreCommand;
 import it.blacked.lifestealcore.events.InventoryClickListener;
 import it.blacked.lifestealcore.events.PlayerDeathListener;
+import it.blacked.lifestealcore.events.PlayerInteractListener;
 import it.blacked.lifestealcore.events.PlayerJoinQuitListener;
 import it.blacked.lifestealcore.events.PlayerMoveListener;
 import it.blacked.lifestealcore.managers.BanManager;
@@ -44,13 +45,6 @@ public final class LifeCore extends JavaPlugin {
         getLogger().info("LifeCore v" + getDescription().getVersion() + " Enabled!");
     }
 
-    @Override
-    public void onDisable() {
-        heartManager.saveAllHearts();
-        banManager.saveAllBans();
-        getLogger().info("LifeCore v" + getDescription().getVersion() + " Disabled!");
-    }
-
     private void registerCommands() {
         getCommand("lifecore").setExecutor(new LifeCoreCommand(this));
         getCommand("lifecoreadmin").setExecutor(new LifeCoreAdminCommand(this));
@@ -61,6 +55,7 @@ public final class LifeCore extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerJoinQuitListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerMoveListener(this), this);
         getServer().getPluginManager().registerEvents(new InventoryClickListener(this), this);
+        getServer().getPluginManager().registerEvents(new PlayerInteractListener(this), this);
     }
 
     private void registerPlaceholders() {

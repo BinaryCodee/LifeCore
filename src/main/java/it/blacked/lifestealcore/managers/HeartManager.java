@@ -100,9 +100,16 @@ public class HeartManager {
         }
     }
 
-    public void addPlayerHearts(UUID uuid, int amount) {
+    public boolean addPlayerHearts(UUID uuid, int amount) {
         int currentHearts = getPlayerHearts(uuid);
         int maxHearts = plugin.getConfigManager().getMaxHearts();
+        if (currentHearts >= maxHearts) {
+            Player player = Bukkit.getPlayer(uuid);
+            if (player != null && player.isOnline()) {
+                player.sendMessage(plugin.getConfigManager().getMessage("hearts_limit_reached"));
+            }
+            return false;
+        }
 
         int newHearts = Math.min(currentHearts + amount, maxHearts);
         setPlayerHearts(uuid, newHearts);
@@ -110,6 +117,8 @@ public class HeartManager {
         if (plugin.getBanManager().isPlayerBanned(uuid)) {
             plugin.getBanManager().unbanPlayer(uuid);
         }
+
+        return true;
     }
 
     public void incrementSuicideCounter(UUID uuid) {

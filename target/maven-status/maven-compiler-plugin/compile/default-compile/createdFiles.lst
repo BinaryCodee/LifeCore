@@ -11,6 +11,7 @@ it\blacked\lifestealcore\commands\CommandTabCompleter.class
 it\blacked\lifestealcore\events\InventoryClickListener.class
 it\blacked\lifestealcore\commands\LifeCoreAdminCommand.class
 it\blacked\lifestealcore\managers\BanManager.class
+it\blacked\lifestealcore\events\PlayerInteractListener.class
 it\blacked\lifestealcore\gui\UnbanMenu.class
 it\blacked\lifestealcore\commands\LifeCoreCommand.class
 it\blacked\lifestealcore\managers\HeartManager.class

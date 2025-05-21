@@ -181,14 +181,6 @@ public class ConfigManager {
         return economyEnabled;
     }
 
-    public int getHeartPrice() {
-        return heartPrice;
-    }
-
-    public int getUnbanPrice() {
-        return unbanPrice;
-    }
-
     public Map<String, Object> getBuyMenuConfig() {
         return buyMenuConfig;
     }
@@ -203,5 +195,62 @@ public class ConfigManager {
 
     public List<String> getCommandAliases(String command) {
         return commandAliases.getOrDefault(command, new ArrayList<>());
+    }
+
+    public String getBuyMenuTitle() {
+        return ChatColor.translateAlternateColorCodes('&', (String) buyMenuConfig.get("title"));
+    }
+
+    public Map<String, Object> getHeartItemConfig() {
+        return (Map<String, Object>) buyMenuConfig.get("heart_item");
+    }
+
+    public double getHeartPrice() {
+        Object priceObj = config.get("economy.heart_price");
+        if (priceObj instanceof Number) {
+            return ((Number) priceObj).doubleValue();
+        } else if (priceObj instanceof String) {
+            try {
+                return Double.parseDouble((String) priceObj);
+            } catch (NumberFormatException e) {
+                plugin.getLogger().warning("Impossibile convertire il prezzo del cuore in un numero: " + priceObj);
+                return 50000.0;
+            }
+        }
+        return 50000.0;
+    }
+
+    public String getUnbanMenuTitle() {
+        String title = (String) getConfigValue("gui.unban_menu.title", "&8Lifesteal Menu");
+        return ChatColor.translateAlternateColorCodes('&', title);
+    }
+
+    public double getUnbanPrice() {
+        Object priceObj = config.get("economy.unban_price");
+        if (priceObj instanceof Number) {
+            return ((Number) priceObj).doubleValue();
+        } else if (priceObj instanceof String) {
+            try {
+                return Double.parseDouble((String) priceObj);
+            } catch (NumberFormatException e) {
+                plugin.getLogger().warning("Impossibile convertire il prezzo dell'unban in un numero: " + priceObj);
+                return 150000.0;
+            }
+        }
+        return 150000.0;
+    }
+
+    private Object getConfigValue(String path, Object defaultValue) {
+        Object value = config;
+        for (String part : path.split("\\.")) {
+            if (!(value instanceof Map)) {
+                return defaultValue;
+            }
+            value = ((Map<?, ?>) value).get(part);
+            if (value == null) {
+                return defaultValue;
+            }
+        }
+        return value;
     }
 }

@@ -1,10 +1,12 @@
 package it.blacked.lifestealcore.placeholders;
 
 import it.blacked.lifestealcore.LifeCore;
-import it.blacked.lifestealcore.LifeCore;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.OfflinePlayer;
 import org.jetbrains.annotations.NotNull;
+
+import java.text.NumberFormat;
+import java.util.Locale;
 
 public class LifeCoreExpansion extends PlaceholderExpansion {
 
@@ -69,6 +71,44 @@ public class LifeCoreExpansion extends PlaceholderExpansion {
             return String.valueOf(max - current);
         }
 
+        if (params.equalsIgnoreCase("heart_price")) {
+            return formatNumber(plugin.getConfigManager().getHeartPrice());
+        }
+
+        if (params.equalsIgnoreCase("unban_price")) {
+            return formatNumber(plugin.getConfigManager().getUnbanPrice());
+        }
+
+        if (params.equalsIgnoreCase("balance")) {
+            if (plugin.getEconomy() != null) {
+                return formatNumber(plugin.getEconomy().getBalance(player));
+            }
+            return "0";
+        }
+
+        if (params.equalsIgnoreCase("enough_heart")) {
+            if (plugin.getEconomy() != null) {
+                double balance = plugin.getEconomy().getBalance(player);
+                double price = plugin.getConfigManager().getHeartPrice();
+                return balance >= price ? "§a✓ §7Clicca per acquistare un cuore!" : "§c✘ §7Non hai abbastanza soldi!";
+            }
+            return "§c✘ §7Economy non trovato!";
+        }
+
+        if (params.equalsIgnoreCase("enough_unban")) {
+            if (plugin.getEconomy() != null) {
+                double balance = plugin.getEconomy().getBalance(player);
+                double price = plugin.getConfigManager().getUnbanPrice();
+                return balance >= price ? "§a✓ §7Clicca per acquistare l'unban!" : "§c✘ §7Non hai abbastanza soldi!";
+            }
+            return "§c✘ §7Economy non trovato!";
+        }
+
         return null;
+    }
+
+    private String formatNumber(double number) {
+        NumberFormat format = NumberFormat.getNumberInstance(Locale.ITALY);
+        return format.format(number);
     }
 }

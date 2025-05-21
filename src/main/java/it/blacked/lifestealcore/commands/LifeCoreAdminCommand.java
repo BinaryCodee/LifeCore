@@ -76,13 +76,21 @@ public class LifeCoreAdminCommand implements CommandExecutor {
 
                 try {
                     int amount = Integer.parseInt(args[3]);
-                    plugin.getHeartManager().addPlayerHearts(target.getUniqueId(), amount);
+                    boolean success = plugin.getHeartManager().addPlayerHearts(target.getUniqueId(), amount);
 
-                    Map<String, String> placeholders = new HashMap<>();
-                    placeholders.put("player", playerName);
-                    placeholders.put("amount", String.valueOf(amount));
+                    if (success) {
+                        Map<String, String> placeholders = new HashMap<>();
+                        placeholders.put("player", playerName);
+                        placeholders.put("amount", String.valueOf(amount));
 
-                    sender.sendMessage(plugin.getConfigManager().getMessage("heart_added", placeholders));
+                        sender.sendMessage(plugin.getConfigManager().getMessage("heart_added", placeholders));
+                    } else {
+                        Map<String, String> placeholders = new HashMap<>();
+                        placeholders.put("player", playerName);
+                        placeholders.put("max_hearts", String.valueOf(plugin.getConfigManager().getMaxHearts()));
+
+                        sender.sendMessage(plugin.getConfigManager().getMessage("hearts_limit_reached_admin", placeholders));
+                    }
                 } catch (NumberFormatException e) {
                     sender.sendMessage(plugin.getConfigManager().getMessage("invalid_amount"));
                 }

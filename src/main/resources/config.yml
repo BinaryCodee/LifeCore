@@ -2,6 +2,7 @@ messages:
   prefix: "&8[&c&lLifeCore&8] &r"
   no_permission: "&cNon hai il permesso."
   player_not_found: "&cGiocatore non trovato."
+  player_only: "&cComando solo per i giocatori."
   invalid_usage: "&cUsa: {usage}"
   invalid_amount: "&cSpecifica un valore valido."
   heart_added: "&aHai aggiunto con successo &c{amount} cuore(i) &aa &f{player}&a."
@@ -10,6 +11,8 @@ messages:
   heart_list_header: "&4&lCUORI &c&lGIOCATORI"
   heart_list_format: "&8* &f{player} &c{hearts} cuore(i)"
   heart_list_footer: ""
+  hearts_limit_reached: "&cHai raggiunto il limite massimo di cuori (&e20&c)!"
+  hearts_limit_reached_admin: "&cIl giocatore &e{player} &cha raggiunto il limite massimo di cuori (&e{max_hearts}&c)!"
   killer_heart_gained: "&aHai guadagnato &c1 cuore &auccidendo &f{victim}&a!"
   victim_heart_lost: "&cHai perso &c1 cuore &cper essere stato ucciso da &f{killer}&c!"
   suicide_warning: "&cAttenzione: Se ti uccidi altre {remaining} volte, verrai bannato!"
@@ -22,11 +25,14 @@ messages:
   banned_message: "&cSei stato bannato dal server per {time}!\n&ePuoi sbannarti usando &6/lifecore buy"
   unbanned_message: "&aSei stato unbannato dalla lifesteal!"
   unban_bought: "&aHai acquistato con successo l'unban! Ora puoi tornare a giocare."
+  already_unbanned: "&cNon sei bannato e non per questo non puoi acquistare un UnBan!"
   no_hearts_remaining: "&cNon hai più cuori e sei stato bannato!"
   max_hearts_reached: "&cHai raggiunto il numero massimo di cuori!"
+  inventory_full: "&cIl tuo inventario è pieno."
   help_header: "&c&lLIFESTEAL &7- &e&lCOMANDI UTENTI"
   help_command: "&c/lifecore help &8- &7Mostra tutti i comandi per gli utenti"
   buy_command: "&c/lifecore buy &8- &7Apri il menu della lifesteal"
+  admin_help_command: "&c/lifecoreadmin &8- &7Mostra tutti i comandi per gli admin"
   admin_help_header: "&c&lLIFESTEAL &7- &6&lCOMANDI ADMIN"
   admin_help_heart_add: "&c/lifecoreadmin heart add [player] [amount] &8- &7Aggiungi i cuori ad un giocatore"
   admin_help_heart_remove: "&c/lifecoreadmin heart remove [player] [amount] &8- &7Rimuovi i cuori di un giocatore"
@@ -34,10 +40,6 @@ messages:
   admin_help_ban: "&c/lifecoreadmin ban [player] [time] &8- &7Banna un giocatore per un determinato tempo"
   admin_help_unban: "&c/lifecoreadmin unban [player] &8- &7Sbanna un giocatore"
   admin_help_footer: ""
-  ban_help_header: "&c&lLIFESTEAL &7- &e&lCOMANDI BAN"
-  ban_help_ban: "&c/ban [player] [time] &8- &7Banna un giocatore per un determinato tempo"
-  ban_help_unban: "&c/unban [player] &8- &7Sbanna un giocatore"
-  ban_help_footer: ""
 
 settings:
   max_hearts: 20
@@ -55,32 +57,31 @@ economy:
 gui:
   buy_menu:
     title: "&8Lifesteal Menu"
-    size: 27
-    unban_item:
-      name: "&b&lUnban Lifesteal"
-      material: "PAPER"
-      lore:
-        - "&7Clicca per aprire il Menu UnBan."
-        - "&7Costo: &6{unban_price}"
-      slot: 12
+    rows: 3
     heart_item:
-      name: "&c&lAcquista Cuori"
-      material: "RED_DYE"
-      lore:
-        - "&7Clicca per acquistare un cuore."
-        - "&7Costo: &6{heart_price}"
-      slot: 14
-
-  unban_menu:
-    title: "&8Unban Menu"
-    size: 27
-    crystal_item:
-      name: "&b&lUnban"
       material: "NETHER_STAR"
+      name: "&cCuore"
+      slot: 12
       lore:
-        - "&7Clicca per acquistare l'unban."
-        - "&7Costo: &6{unban_price}"
-      slot: 13
+        - "&8&m--------------------"
+        - "&f• &7Acquista un cuore extra!"
+        - "&f• &7Costo: &e%economy_heart_price% $"
+        - "&f• &7Soldi: &e$%economy_balance%"
+        - ""
+        - "%economy_enough_heart%"
+        - "&8&m--------------------"
+    unban_item:
+      material: "END_CRYSTAL"
+      name: "&bUnBan"
+      slot: 14
+      lore:
+        - "&8&m--------------------"
+        - "&f• &7Acquista il tuo unban istantaneamente!"
+        - "&f• &7Costo: &e%economy_unban_price% $"
+        - "&f• &7Soldi: &e$%economy_balance%"
+        - ""
+        - "%economy_enough_unban%"
+        - "&8&m--------------------"
 
 commands:
   lifecore:
