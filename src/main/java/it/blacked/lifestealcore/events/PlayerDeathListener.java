@@ -1,11 +1,13 @@
 package it.blacked.lifestealcore.events;
 
 import it.blacked.lifestealcore.LifeCore;
+import it.blacked.lifestealcore.commands.SpawnCommand;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,67 +16,70 @@ import java.util.UUID;
 public class PlayerDeathListener implements Listener {
 
     private final LifeCore plugin;
+    private final Map<UUID, UUID> lastKillerMap = new HashMap<>();
 
     public PlayerDeathListener(LifeCore plugin) {
         this.plugin = plugin;
     }
 
-    @EventHandler(priority = EventPriority.NORMAL)
+    @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
         Player victim = event.getEntity();
         Player killer = victim.getKiller();
-
-        if (killer == null || killer.getUniqueId().equals(victim.getUniqueId())) {
-            handleSuicide(victim);
-            return;
-        }
-
-        handleKill(killer, victim);
-    }
-
-    private void handleSuicide(Player player) {
-        UUID uuid = player.getUniqueId();
-        plugin.getHeartManager().incrementSuicideCounter(uuid);
-        int suicideCount = plugin.getHeartManager().getSuicideCounter(uuid);
-        int maxSuicides = plugin.getConfigManager().getSuicideBanCount();
-        int remaining = maxSuicides - suicideCount;
-
-        if (remaining > 0) {
+        if (killer != null && killer != victim) {
+            lastKillerMap.put(victim.getUniqueId(), killer.getUniqueId());
+            int heartsToTransfer = plugin.getConfigManager().getHeartTransferCount();
+            plugin.getHeartManager().removePlayerHearts(victim.getUniqueId(), heartsToTransfer);
+            boolean success = plugin.getHeartManager().addPlayerHearts(killer.getUniqueId(), heartsToTransfer);
             Map<String, String> placeholders = new HashMap<>();
-            placeholders.put("remaining", String.valueOf(remaining));
-
-            player.sendMessage(plugin.getConfigManager().getMessage("suicide_warning", placeholders));
+            placeholders.put("victim", victim.getName());
+            placeholders.put("killer", killer.getName());
+            placeholders.put("hearts", String.valueOf(heartsToTransfer));
+            victim.sendMessage(plugin.getConfigManager().getMessage("heart_lost", placeholders));
+            if (success) {
+                killer.sendMessage(plugin.getConfigManager().getMessage("heart_gained", placeholders));
+            } else {
+                killer.sendMessage(plugin.getConfigManager().getMessage("hearts_limit_reached",
+                        Map.of("max_hearts", String.valueOf(plugin.getConfigManager().getMaxHearts()))));
+            }
+            checkForBan(victim);
         } else {
-            player.sendMessage(plugin.getConfigManager().getMessage("suicide_banned"));
+            int suicideHeartLoss = plugin.getConfigManager().getSuicideHeartLoss();
+            if (suicideHeartLoss > 0) {
+                plugin.getHeartManager().removePlayerHearts(victim.getUniqueId(), suicideHeartLoss);
+                Map<String, String> placeholders = new HashMap<>();
+                placeholders.put("hearts", String.valueOf(suicideHeartLoss));
+                victim.sendMessage(plugin.getConfigManager().getMessage("heart_lost_suicide", placeholders));
+                checkForBan(victim);
+            }
         }
 
-        plugin.getHeartManager().removePlayerHearts(uuid, 1);
-
-        if (plugin.getHeartManager().getPlayerHearts(uuid) <= 0) {
-            player.sendMessage(plugin.getConfigManager().getMessage("no_hearts_remaining"));
-            plugin.getBanManager().banPlayer(uuid, plugin.getConfigManager().getDeathBanTime());
-        }
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                if (victim.isOnline()) {
+                    SpawnCommand spawnCommand = new SpawnCommand(plugin);
+                    spawnCommand.teleportToSpawn(victim);
+                }
+            }
+        }.runTaskLater(plugin, 1L);
     }
 
-    private void handleKill(Player killer, Player victim) {
-        UUID killerUuid = killer.getUniqueId();
-        UUID victimUuid = victim.getUniqueId();
+    private void checkForBan(Player player) {
+        int currentHearts = plugin.getHeartManager().getPlayerHearts(player.getUniqueId());
 
-        plugin.getHeartManager().resetSuicideCounter(killerUuid);
-        plugin.getHeartManager().resetSuicideCounter(victimUuid);
-        plugin.getHeartManager().addPlayerHearts(killerUuid, 1);
-
-        Map<String, String> killerPlaceholders = new HashMap<>();
-        killerPlaceholders.put("victim", victim.getName());
-        killer.sendMessage(plugin.getConfigManager().getMessage("killer_heart_gained", killerPlaceholders));
-        plugin.getHeartManager().removePlayerHearts(victimUuid, 1);
-        Map<String, String> victimPlaceholders = new HashMap<>();
-        victimPlaceholders.put("killer", killer.getName());
-        victim.sendMessage(plugin.getConfigManager().getMessage("victim_heart_lost", victimPlaceholders));
-
-        if (plugin.getHeartManager().getPlayerHearts(victimUuid) <= 0) {
-            victim.sendMessage(plugin.getConfigManager().getMessage("no_hearts_remaining"));
-            plugin.getBanManager().banPlayer(victimUuid, plugin.getConfigManager().getDeathBanTime());
+        if (currentHearts <= 0) {
+            String banTime = plugin.getConfigManager().getDeathBanTime();
+            plugin.getBanManager().banPlayer(player.getUniqueId(), banTime);
+            Map<String, String> placeholders = new HashMap<>();
+            placeholders.put("time", banTime);
+            player.sendMessage(plugin.getConfigManager().getMessage("ban_death", placeholders));
+            Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                if (player.isOnline()) {
+                    SpawnCommand spawnCommand = new SpawnCommand(plugin);
+                    spawnCommand.teleportToSpawn(player);
+                }
+            }, 1L);
         }
     }
 }

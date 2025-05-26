@@ -10,18 +10,15 @@ import org.bukkit.entity.Player;
 public class LifeCoreCommand implements CommandExecutor {
 
     private final LifeCore plugin;
+    private final SpawnCommand spawnCommand;
 
     public LifeCoreCommand(LifeCore plugin) {
         this.plugin = plugin;
+        this.spawnCommand = new SpawnCommand(plugin);
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if (!sender.hasPermission(plugin.getConfigManager().getCommandPermission("lifecore"))) {
-            sender.sendMessage(plugin.getConfigManager().getMessage("no_permission"));
-            return true;
-        }
-
         if (args.length == 0 || args[0].equalsIgnoreCase("help")) {
             sendHelpMessage(sender);
             return true;
@@ -34,14 +31,12 @@ public class LifeCoreCommand implements CommandExecutor {
             }
 
             Player player = (Player) sender;
-
-            if (!player.hasPermission(plugin.getConfigManager().getCommandPermission("lifecore_buy"))) {
-                player.sendMessage(plugin.getConfigManager().getMessage("no_permission"));
-                return true;
-            }
-
             new BuyMenu(plugin, player).open();
             return true;
+        }
+
+        if (args[0].equalsIgnoreCase("spawn")) {
+            return spawnCommand.onCommand(sender, command, label, new String[0]);
         }
 
         sendHelpMessage(sender);
@@ -49,11 +44,12 @@ public class LifeCoreCommand implements CommandExecutor {
     }
 
     private void sendHelpMessage(CommandSender sender) {
-        sender.sendMessage("§cThis server is running LifestealCore v1.0 - By blacked10469");
+        sender.sendMessage("§cThis server is running LifestealCore v1.2 - By blacked10469");
         sender.sendMessage("");
         sender.sendMessage(plugin.getConfigManager().getMessage("help_header"));
         sender.sendMessage(plugin.getConfigManager().getMessage("help_command"));
         sender.sendMessage(plugin.getConfigManager().getMessage("buy_command"));
+        sender.sendMessage(plugin.getConfigManager().getMessage("spawn_command"));
 
         if (sender.hasPermission(plugin.getConfigManager().getCommandPermission("lifecoreadmin"))) {
             sender.sendMessage(plugin.getConfigManager().getMessage("admin_help_command"));

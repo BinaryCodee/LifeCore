@@ -3,63 +3,261 @@ messages:
   no_permission: "&cNon hai il permesso."
   player_not_found: "&cGiocatore non trovato."
   player_only: "&cComando solo per i giocatori."
-  invalid_usage: "&cUsa: {usage}"
+  invalid_usage: "&cUsa: %usage%"
   invalid_amount: "&cSpecifica un valore valido."
-  heart_added: "&aHai aggiunto con successo &c{amount} cuore(i) &aa &f{player}&a."
-  heart_removed: "&aHai rimosso con successo &c{amount} cuore(i) &aa &f{player}&a."
-  heart_list_player: "&f{player} &aha &c{hearts} cuore(i)&a."
+  heart_added: "&aHai aggiunto con successo &c%amount% cuore(i) &aa &f%player%&a."
+  heart_removed: "&aHai rimosso con successo &c%amount% cuore(i) &aa &f%player%&a."
+  heart_list_player: "&f%player% &aha &c%hearts% cuore(i)&a."
   heart_list_header: "&4&lCUORI &c&lGIOCATORI"
-  heart_list_format: "&8* &f{player} &c{hearts} cuore(i)"
+  heart_list_format: "&8* &f%player% &c%hearts% cuore(i)"
   heart_list_footer: ""
   hearts_limit_reached: "&cHai raggiunto il limite massimo di cuori (&e20&c)!"
-  hearts_limit_reached_admin: "&cIl giocatore &e{player} &cha raggiunto il limite massimo di cuori (&e{max_hearts}&c)!"
-  killer_heart_gained: "&aHai guadagnato &c1 cuore &auccidendo &f{victim}&a!"
-  victim_heart_lost: "&cHai perso &c1 cuore &cper essere stato ucciso da &f{killer}&c!"
-  suicide_warning: "&cAttenzione: Se ti uccidi altre {remaining} volte, verrai bannato!"
+  hearts_limit_reached_admin: "&cIl giocatore &e%player% &cha raggiunto il limite massimo di cuori (&e%max_hearts%&c)!"
+  heart_gained: "&aHai guadagnato &c%hearts% cuore(i) &auccidendo &f%victim%&a!"
+  heart_lost: "&cHai perso &c%hearts% cuore(i) &cper essere stato ucciso da &f%killer%&c!"
+  heart_lost_suicide: "&cHai perso &c%hearts% cuore(i) &cper esserti suicidato!"
+  suicide_warning: "&cAttenzione: Se ti uccidi altre %remaining% volte, verrai bannato!"
   suicide_banned: "&cSei stato bannato per esserti ucciso troppe volte da solo!"
   heart_bought: "&aHai acquistato con successo &c1 cuore&a!"
   heart_redeemed: "&aHai riscattato con successo &c1 cuore&a!"
   not_enough_money: "&cNon hai abbastanza soldi!"
-  ban_command_success: "&aIl giocatore {player} è stato bannato per {time}."
-  unban_command_success: "&aIl giocatore {player} è stato unbannato."
-  banned_message: "&cSei stato bannato dal server per {time}!\n&ePuoi sbannarti usando &6/lifecore buy"
+  ban_command_success: "&aIl giocatore %player% è stato bannato per %time%."
+  unban_command_success: "&aIl giocatore %player% è stato unbannato."
+  banned_message: "&cSei stato bannato dal server per %time%!\n&ePuoi sbannarti usando &6/lifecore buy"
+  banned_join_message: "&cSei ancora bannato dal server per %time%!\n&ePuoi sbannarti usando &6/lifecore buy"
+  banned_title: "&c&lSEI BANNATO"
+  banned_subtitle: "&eTempo rimanente: &6%time%"
+  banned_freeze_message: "&cNon puoi muoverti mentre sei bannato! Usa: /lifecore buy e acquista un cuore o l'unban!"
+  banned_command_blocked: "&c&lSei stato bannato! &7Puoi usare solo: &e&n/lifecore buy&7 per acquistare dei cuori o l'unban&e!"
+  banned_chat_format: "&8[&c&lBANNATO&8] &7%player%: &8%message%"
+  banned_heart_redeem_blocked: "&cNon puoi riscattare cuori mentre sei bannato!"
+  ban_death: "&cHai perso tutti i tuoi cuori e sei stato bannato per %time%!"
   unbanned_message: "&aSei stato unbannato dalla lifesteal!"
   unban_bought: "&aHai acquistato con successo l'unban! Ora puoi tornare a giocare."
-  already_unbanned: "&cNon sei bannato e non per questo non puoi acquistare un UnBan!"
+  already_unbanned: "&cNon puoi acquistare l'UnBan perché non sei bannato!"
   no_hearts_remaining: "&cNon hai più cuori e sei stato bannato!"
   max_hearts_reached: "&cHai raggiunto il numero massimo di cuori!"
   inventory_full: "&cIl tuo inventario è pieno."
+  spawn_set: "&aHai settato lo spawn!"
+  spawn_not_set: "&cLo spawn del server non esiste."
+  teleport_countdown_started: "&aVerrai teletrasportato allo spawn in &e%seconds% secondi&a. Non muoverti!"
+  teleport_countdown_title: "&a&lTELEPORT IN &e&l%seconds%"
+  teleport_countdown_subtitle: "&7Non muoverti!"
+  teleport_cancelled_movement: "&cTeleport annullato. Ti sei mosso!"
+  teleported_to_spawn: "&aSei tornato allo spawn."
+  teleport_complete_title: "&a&lSPAWN"
+  teleport_complete_subtitle: "&bSei tornato allo spawn&e!"
+  rtp_searching: "&b&l✦ &f&lRTP &8▸ &7Sto cercando una posizione sicura... &b✦"
+  rtp_failed: "&c&l✖ &f&lRTP &8▸ &cNon sono riuscito a trovare una posizione sicura. Riprova più tardi."
+  rtp_failed_title: "&c&lRTP FALLITO"
+  rtp_failed_subtitle: "&7Nessuna posizione sicura trovata!"
+  rtp_success: "&a&l✓ &f&lRTP &8▸ &aTeletrasportato a &e%x%&7, &e%y%&7, &e%z% &anel mondo &b%world%&a!"
+  rtp_success_title: "&a&lRTP COMPLETATO"
+  rtp_success_subtitle: "&b%world% &7(%x%, %y%, %z%)"
+  rtp_cooldown: "&e&l⏱ &f&lRTP &8▸ &cDevi aspettare ancora &e%time% secondi &cprima di usare l'RTP."
+  rtp_world_not_found: "&c&l✖ &f&lRTP &8▸ &cIl mondo '&e%world%&c' non è stato trovato."
+  rtp_not_enough_money: "&c&l$ &f&lRTP &8▸ &cNon hai abbastanza soldi. Costo: &e%cost%&c."
+  rtp_money_taken: "&a&l$ &f&lRTP &8▸ &aHai pagato &e%cost% &aper l'RTP."
+  rtp_title: "&b&lTeletrasporto in %time%..."
+  rtp_countdown: "&e&l⟳ &f&lRTP &8▸ &7Teletrasporto in &e%time% secondi&7..."
+  rtp_countdown_subtitle: "&7Non muoverti!"
   help_header: "&c&lLIFESTEAL &7- &e&lCOMANDI UTENTI"
   help_command: "&c/lifecore help &8- &7Mostra tutti i comandi per gli utenti"
   buy_command: "&c/lifecore buy &8- &7Apri il menu della lifesteal"
+  spawn_command: "&c/spawn &8- &7Vai allo spawn del server"
   admin_help_command: "&c/lifecoreadmin &8- &7Mostra tutti i comandi per gli admin"
   admin_help_header: "&c&lLIFESTEAL &7- &6&lCOMANDI ADMIN"
-  admin_help_heart_add: "&c/lifecoreadmin heart add [player] [amount] &8- &7Aggiungi i cuori ad un giocatore"
-  admin_help_heart_remove: "&c/lifecoreadmin heart remove [player] [amount] &8- &7Rimuovi i cuori di un giocatore"
-  admin_help_heart_list: "&c/lifecoreadmin heart list [player/all] &8- &7Lista cuori di un giocatore o di tutti i giocatori"
-  admin_help_ban: "&c/lifecoreadmin ban [player] [time] &8- &7Banna un giocatore per un determinato tempo"
-  admin_help_unban: "&c/lifecoreadmin unban [player] &8- &7Sbanna un giocatore"
-  admin_help_footer: ""
+  admin_help_heart_add: "&c/lifelongadmin heart add %player% %amount% &8- &7Aggiungi i cuori ad un giocatore"
+  admin_help_heart_remove: "&c/lifecoreadmin heart remove %player% %amount% &8- &fRimuovi i cuori di un giocatore"
+  admin_help_heart_list: "&c/lifecoreadmin heart list %player%/all &8- &7Lista cuori di un giocatore o di tutti i giocatori"
+  admin_help_ban: "&c/lifecoreadmin ban %player% %time% &8- &7Banna un giocatore per un determinato tempo"
+  admin_help_unban: "&c/lifecoreadmin unban %player% &8- &7Sbanna un giocatore"
+  admin_help_setspawn: "&c/lifecoreadmin setspawn &8- &7Imposta lo spawn del server"
+  admin_help_reload: "&c/lifecoreadmin reload &8- &7Ricarica la configurazione del plugin"
+  admin_help_footer: "&a"
 
 settings:
-  max_hearts: 20
+  max_hearts: 30
   default_hearts: 10
+  heart_transfer_count: 1"
+  suicide_heart_loss_enabled: 1
   suicide_ban_count: 3
-  suicide_ban_time: 7d
+  suicide_ban_time: "7d"
   death_ban_time: 4d
   starting_hearts_after_unban: 6
   enable_economy: true
+  spawn_teleport_delay: 2
+  spawn_teleport_title_enabled: true
+  spawn_teleport_sound_enabled: true
+  spawn_teleport_sound: "ENTITY_ENDERMAN_TELEPORT"
+  spawn_teleport_sound_volume: 1.0
+  spawn_teleport_sound_pitch: 1.0
+  spawn_countdown_title_enabled: true
+  spawn_countdown_sound_enabled: true
+  spawn_countdown_sound: "BLOCK_NOTE_BLOCK_PLING"
+  spawn_countdown_sound_volume: 1.0
+  spawn_countdown_sound_pitch: 1.0
+  ban_title_enabled: true
+  ban_freeze_message_enabled: true
+  ban-block-commands: true
+  ban-chat-format: true
+
+rtp:
+  enabled: true
+  cooldown: 2
+  max_radius: 15000
+  min_radius: 500
+  max_attempts: 100
+  delay: 2
+  menu:
+    title: "&0&l⟐ &b&lRANDOM TELEPORT &0&l⟐"
+    rows: 3
+    items:
+      overworld:
+        world: "world"
+        slot: 12
+        type: "GRASS_BLOCK"
+        name: "&a&l⟐ OVERWORLD ⟐"
+        lore:
+          - "&8&l▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"
+          - ""
+          - "&f&l✩ &7Teletrasportati nel mondo &a%world%"
+          - "&f&l✩ &7Ambiente sicuro e familiare"
+          - "&f&l✩ &7Perfetto per iniziare l'avventura"
+          - ""
+          - "&7▸ Stato del mondo: %status%"
+          - "&7▸ Grandezza mondo: &e1000 x 1000"
+          - "&7▸ Raggio: &e500-1500 blocchi"
+          - "&7▸ Altezza: &e64-80 blocchi"
+          - ""
+          - "&a&l⟐ &aClicca per teletrasportarti! &a&l⟐"
+          - "&8&l▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"
+      nether:
+        world: "world_nether"
+        slot: 13
+        type: "NETHERRACK"
+        name: "&c&l⟐ NETHER ⟐"
+        lore:
+          - "&8&l▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"
+          - ""
+          - "&f&l✦ &7Teletrasportati nel mondo &c%world%"
+          - "&c&l⚠ &cAttenzione: mondo estremamente pericoloso!"
+          - "&f&l✦ &7Ricco di risorse rare e preziose"
+          - "&f&l✦ &7Solo per giocatori esperti"
+          - ""
+          - "&7▸ Stato mondo: %status%"
+          - "&7▸ Grandezza mondo: &e10000 x 10000"
+          - "&7▸ Raggio: &e500-8000 blocchi"
+          - "&7▸ Altezza: &e32-120 blocchi"
+          - ""
+          - "&c&l⟐ &cClicca per teletrasportarti! &c&l⟐"
+          - "&8&l▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"
+      end:
+        world: "world_the_end"
+        slot: 14
+        type: "END_STONE"
+        name: "&5&l⟐ THE END ⟐"
+        lore:
+          - "&8&l▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"
+          - ""
+          - "&f&l✦ &7Teletrasportati nel mondo &5%world%"
+          - "&c&l⚠ &cAttenzione: mondo pericolosissimo!"
+          - "&f&l✦ &7Dimora del Drago dell'End"
+          - "&f&l✦ &7Risorse end-game uniche"
+          - ""
+          - "&7▸ Stato mondo: %status%"
+          - "&7▸ Grandezza mondo: &e10000 x 10000"
+          - "&7▸ Raggio: &e500-5000 blocchi"
+          - "&7▸ Altezza: &e50-80 blocchi"
+          - ""
+          - "&5&l⟐ &5Clicca per teletrasportarti! &5&l⟐"
+          - "&8&l▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"
+      info:
+        world: ""
+        slot: 26
+        type: "COMPASS"
+        name: "&e&l⟐ INFORMAZIONI RTP ⟐"
+        lore:
+          - "&8&l▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"
+          - ""
+          - "&f&l✦ &7Random Teleport System"
+          - "&f&l✦ &7Teletrasportati in posizioni casuali"
+          - "&f&l✦ &7Esplora nuovi territori"
+          - ""
+          - "&e&l⚡ CARATTERISTICHE:"
+          - "&7▸ Cooldown: &e5 secondi"
+          - "&7▸ Tentativi max: &e20"
+          - "&7▸ Delay teleport: &e5 secondi"
+          - ""
+          - "&a&l⟐ &aScegli un mondo per iniziare! &a&l⟐"
+          - "&8&l▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"
+    fill_item:
+      material: "BLACK_STAINED_GLASS_PANE"
+      name: " "
+  economy:
+    enabled: false
+    cost: 0.0
+  sound:
+    enabled: true
+    sound: "ENTITY_ENDERMAN_TELEPORT"
+    volume: 1.0
+    pitch: 1.2
+  worlds:
+    overworld:
+      enabled: true
+      max_radius: 15000
+      min_radius: 1000
+      max_y: 256
+      min_y: 64
+      safe_blocks:
+        - "GRASS_BLOCK"
+        - "DIRT"
+        - "STONE"
+        - "SAND"
+        - "GRAVEL"
+      unsafe_blocks:
+        - "LAVA"
+        - "WATER"
+        - "FIRE"
+        - "MAGMA_BLOCK"
+    nether:
+      enabled: true
+      max_radius: 8000
+      min_radius: 500
+      max_y: 120
+      min_y: 32
+      safe_blocks:
+        - "NETHERRACK"
+        - "NETHER_BRICKS"
+        - "BLACKSTONE"
+      unsafe_blocks:
+        - "LAVA"
+        - "FIRE"
+        - "MAGMA_BLOCK"
+        - "SOUL_FIRE"
+    end:
+      enabled: true
+      max_radius: 5000
+      min_radius: 500
+      max_y: 80
+      min_y: 50
+      safe_blocks:
+        - "END_STONE"
+        - "PURPUR_BLOCK"
+      unsafe_blocks:
+        - "VOID_AIR"
+        - "END_PORTAL"
 
 economy:
-  heart_price: 50000
-  unban_price: 150000
+  heart_price: 75000
+  unban_price: 300000
 
 gui:
   buy_menu:
     title: "&8Lifesteal Menu"
     rows: 3
     heart_item:
-      material: "NETHER_STAR"
+      material: "RED_DYE"
       name: "&cCuore"
       slot: 12
       lore:
@@ -84,21 +282,10 @@ gui:
         - "&8&m--------------------"
 
 commands:
-  lifecore:
-    permission: "lifecore.use"
-    aliases:
-      - lc
-      - life
-  lifecore_buy:
-    permission: "lifecore.buy"
-    aliases:
-      - lcbuy
-      - lifebuy
-  lifecore_help:
-    permission: "lifecore.help"
-    aliases:
-      - lchelp
-      - lifehelp
+  rtp:
+    permission: "lifecore.rtp.use"
+  lifecore_spawn_bypass:
+    permission: "lifecore.spawn.bypass"
   lifecoreadmin:
     permission: "lifecoreadmin.use"
     aliases:
@@ -116,3 +303,7 @@ commands:
     permission: "lifecoreadmin.ban"
   lifecoreadmin_unban:
     permission: "lifecoreadmin.unban"
+  lifecoreadmin_setspawn:
+    permission: "lifecoreadmin.setspawn"
+  lifecoreadmin_reload:
+    permission: "lifecoreadmin.reload"

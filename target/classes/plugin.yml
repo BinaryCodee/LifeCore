@@ -12,3 +12,13 @@ commands:
   lifecoreadmin:
     description: Admin command for LifeCore
     aliases: [lca]
+  spawn:
+    description: Teleport player to Spawn
+  setspawn:
+    description: Set the player Spawn
+  rtp:
+    description: Teleport player to random position
+  randomtp:
+    description: Teleport player to random position
+  wild:
+    description: Teleport player to random position

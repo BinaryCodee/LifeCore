@@ -52,7 +52,7 @@ public class BuyMenu {
         Map<String, Object> heartItemConfig = (Map<String, Object>) buyMenuConfig.get("heart_item");
         if (heartItemConfig != null) {
             int slot = Integer.parseInt(heartItemConfig.getOrDefault("slot", "0").toString());
-            String material = (String) heartItemConfig.getOrDefault("material", "NETHER_STAR");
+            String material = (String) heartItemConfig.getOrDefault("material", "RED_DYE");
             String name = ((String) heartItemConfig.getOrDefault("name", "&cCuore")).replace("&", "§");
 
             ItemStack item = new ItemStack(Material.valueOf(material));

@@ -1,7 +1,6 @@
 package it.blacked.lifestealcore.managers;
 
 import it.blacked.lifestealcore.LifeCore;
-import it.blacked.lifestealcore.utils.TimeUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -12,65 +11,60 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class BanManager {
 
     private final LifeCore plugin;
+    private final File banFile;
+    private FileConfiguration banConfig;
     private final Map<UUID, Long> bannedPlayers = new HashMap<>();
-    private final File bansFile;
-    private FileConfiguration bansConfig;
 
     public BanManager(LifeCore plugin) {
         this.plugin = plugin;
-        this.bansFile = new File(plugin.getDataFolder(), "bans.yml");
+        this.banFile = new File(plugin.getDataFolder(), "bans.yml");
         loadBans();
     }
 
     private void loadBans() {
-        if (!bansFile.exists()) {
+        if (!banFile.exists()) {
             try {
-                bansFile.getParentFile().mkdirs();
-                bansFile.createNewFile();
+                banFile.getParentFile().mkdirs();
+                banFile.createNewFile();
             } catch (IOException e) {
                 plugin.getLogger().severe("Impossibile creare il file bans.yml!");
                 e.printStackTrace();
             }
         }
 
-        bansConfig = YamlConfiguration.loadConfiguration(bansFile);
+        banConfig = YamlConfiguration.loadConfiguration(banFile);
 
-        if (bansConfig.getConfigurationSection("bans") != null) {
-            for (String uuidStr : bansConfig.getConfigurationSection("bans").getKeys(false)) {
+        if (banConfig.contains("bans")) {
+            for (String uuidString : banConfig.getConfigurationSection("bans").getKeys(false)) {
                 try {
-                    UUID uuid = UUID.fromString(uuidStr);
-                    long expiry = bansConfig.getLong("bans." + uuidStr);
-
-                    if (expiry > System.currentTimeMillis()) {
-                        bannedPlayers.put(uuid, expiry);
-                    } else {
-                        bansConfig.set("bans." + uuidStr, null);
+                    UUID uuid = UUID.fromString(uuidString);
+                    long banEndTime = banConfig.getLong("bans." + uuidString);
+                    if (banEndTime > System.currentTimeMillis()) {
+                        bannedPlayers.put(uuid, banEndTime);
                     }
                 } catch (IllegalArgumentException e) {
-                    plugin.getLogger().warning("UUID non valido nel file bans.yml: " + uuidStr);
+                    plugin.getLogger().warning("UUID non valido nel file bans.yml: " + uuidString);
                 }
             }
         }
-
-        try {
-            bansConfig.save(bansFile);
-        } catch (IOException e) {
-            plugin.getLogger().severe("Impossibile salvare il file bans.yml!");
-            e.printStackTrace();
-        }
     }
 
-    public void saveAllBans() {
+    private void saveBans() {
+        banConfig.set("bans", null);
+
         for (Map.Entry<UUID, Long> entry : bannedPlayers.entrySet()) {
-            bansConfig.set("bans." + entry.getKey().toString(), entry.getValue());
+            banConfig.set("bans." + entry.getKey().toString(), entry.getValue());
         }
 
         try {
-            bansConfig.save(bansFile);
+            banConfig.save(banFile);
         } catch (IOException e) {
             plugin.getLogger().severe("Impossibile salvare il file bans.yml!");
             e.printStackTrace();
@@ -78,32 +72,31 @@ public class BanManager {
     }
 
     public void banPlayer(UUID uuid, String time) {
-        long duration = TimeUtils.parseDuration(time);
-        long expiry = System.currentTimeMillis() + duration;
+        long duration = parseDuration(time);
+        long endTime = System.currentTimeMillis() + duration;
 
-        bannedPlayers.put(uuid, expiry);
-        saveAllBans();
+        bannedPlayers.put(uuid, endTime);
+        saveBans();
 
         Player player = Bukkit.getPlayer(uuid);
         if (player != null && player.isOnline()) {
             Map<String, String> placeholders = new HashMap<>();
-            placeholders.put("time", time);
+            placeholders.put("time", formatTime(duration));
             player.sendMessage(plugin.getConfigManager().getMessage("banned_message", placeholders));
+            if (plugin.getConfigManager().isBanTitleEnabled()) {
+                String title = plugin.getConfigManager().getMessage("banned_title", placeholders);
+                String subtitle = plugin.getConfigManager().getMessage("banned_subtitle", placeholders);
+
+                player.sendTitle(title, subtitle, 20, 100, 20);
+            }
         }
     }
 
     public void unbanPlayer(UUID uuid) {
         bannedPlayers.remove(uuid);
-        bansConfig.set("bans." + uuid.toString(), null);
-        saveAllBans();
-
-        Player player = Bukkit.getPlayer(uuid);
-        if (player != null && player.isOnline()) {
-            player.sendMessage(plugin.getConfigManager().getMessage("unbanned_message"));
-
-            int hearts = plugin.getConfigManager().getStartingHeartsAfterUnban();
-            plugin.getHeartManager().setPlayerHearts(uuid, hearts);
-        }
+        saveBans();
+        int startingHearts = plugin.getConfigManager().getStartingHeartsAfterUnban();
+        plugin.getHeartManager().setPlayerHearts(uuid, startingHearts);
     }
 
     public boolean isPlayerBanned(UUID uuid) {
@@ -111,29 +104,86 @@ public class BanManager {
             return false;
         }
 
-        long expiry = bannedPlayers.get(uuid);
-        if (System.currentTimeMillis() > expiry) {
+        long endTime = bannedPlayers.get(uuid);
+
+        if (System.currentTimeMillis() > endTime) {
             bannedPlayers.remove(uuid);
-            bansConfig.set("bans." + uuid.toString(), null);
-            saveAllBans();
+            saveBans();
             return false;
         }
 
         return true;
     }
 
-    public long getBanExpiry(UUID uuid) {
-        return bannedPlayers.getOrDefault(uuid, 0L);
-    }
-
-    public String getRemainingBanTime(UUID uuid) {
+    public long getRemainingBanTime(UUID uuid) {
         if (!isPlayerBanned(uuid)) {
-            return "0";
+            return 0;
         }
 
-        long expiry = bannedPlayers.get(uuid);
-        long remaining = expiry - System.currentTimeMillis();
+        return Math.max(0, bannedPlayers.get(uuid) - System.currentTimeMillis());
+    }
 
-        return TimeUtils.formatDuration(remaining);
+    public String formatTime(long millis) {
+        long days = TimeUnit.MILLISECONDS.toDays(millis);
+        millis -= TimeUnit.DAYS.toMillis(days);
+
+        long hours = TimeUnit.MILLISECONDS.toHours(millis);
+        millis -= TimeUnit.HOURS.toMillis(hours);
+
+        long minutes = TimeUnit.MILLISECONDS.toMinutes(millis);
+        millis -= TimeUnit.MINUTES.toMillis(minutes);
+
+        long seconds = TimeUnit.MILLISECONDS.toSeconds(millis);
+
+        StringBuilder sb = new StringBuilder();
+
+        if (days > 0) {
+            sb.append(days).append("d ");
+        }
+
+        if (hours > 0 || days > 0) {
+            sb.append(hours).append("h ");
+        }
+
+        if (minutes > 0 || hours > 0 || days > 0) {
+            sb.append(minutes).append("m ");
+        }
+
+        sb.append(seconds).append("s");
+
+        return sb.toString().trim();
+    }
+
+    public long parseDuration(String duration) {
+        if (duration == null || duration.isEmpty()) {
+            return 0;
+        }
+
+        long totalMillis = 0;
+
+        Pattern pattern = Pattern.compile("(\\d+)([dhms])");
+        Matcher matcher = pattern.matcher(duration);
+
+        while (matcher.find()) {
+            int amount = Integer.parseInt(matcher.group(1));
+            String unit = matcher.group(2);
+
+            switch (unit) {
+                case "d":
+                    totalMillis += TimeUnit.DAYS.toMillis(amount);
+                    break;
+                case "h":
+                    totalMillis += TimeUnit.HOURS.toMillis(amount);
+                    break;
+                case "m":
+                    totalMillis += TimeUnit.MINUTES.toMillis(amount);
+                    break;
+                case "s":
+                    totalMillis += TimeUnit.SECONDS.toMillis(amount);
+                    break;
+            }
+        }
+
+        return totalMillis;
     }
 }

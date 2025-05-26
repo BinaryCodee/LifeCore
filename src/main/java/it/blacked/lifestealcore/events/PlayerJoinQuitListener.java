@@ -1,15 +1,17 @@
 package it.blacked.lifestealcore.events;
 
 import it.blacked.lifestealcore.LifeCore;
+import it.blacked.lifestealcore.commands.SpawnCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.UUID;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PlayerJoinQuitListener implements Listener {
 
@@ -19,24 +21,42 @@ public class PlayerJoinQuitListener implements Listener {
         this.plugin = plugin;
     }
 
-    @EventHandler(priority = EventPriority.NORMAL)
+    @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-        UUID uuid = player.getUniqueId();
-
-        if (plugin.getBanManager().isPlayerBanned(uuid)) {
-            String remainingTime = plugin.getBanManager().getRemainingBanTime(uuid);
-            player.sendMessage(plugin.getConfigManager().getMessage("banned_message")
-                    .replace("{time}", remainingTime));
+        if (!plugin.getHeartManager().hasPlayerHearts(player.getUniqueId())) {
+            plugin.getHeartManager().setPlayerHearts(player.getUniqueId(), plugin.getConfigManager().getDefaultHearts());
         }
+        plugin.getHeartManager().updatePlayerMaxHealth(player);
+        if (plugin.getBanManager().isPlayerBanned(player.getUniqueId())) {
+            long remainingTime = Long.parseLong(String.valueOf(plugin.getBanManager().getRemainingBanTime(player.getUniqueId())));
+            Map<String, String> placeholders = new HashMap<>();
+            placeholders.put("time", plugin.getBanManager().formatTime(remainingTime));
+            player.sendMessage(plugin.getConfigManager().getMessage("banned_join_message", placeholders));
+            if (plugin.getConfigManager().isBanTitleEnabled()) {
+                String title = plugin.getConfigManager().getMessage("banned_title", placeholders);
+                String subtitle = plugin.getConfigManager().getMessage("banned_subtitle", placeholders);
 
-        plugin.getHeartManager().updatePlayerMaxHealth(uuid);
+                player.sendTitle(
+                        ChatColor.translateAlternateColorCodes('&', title),
+                        ChatColor.translateAlternateColorCodes('&', subtitle),
+                        20, 100, 20
+                );
+            }
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    SpawnCommand spawnCommand = new SpawnCommand(plugin);
+                    spawnCommand.teleportToSpawn(player);
+                }
+            }.runTaskLater(plugin, 5L);
+        }
     }
 
-    @EventHandler(priority = EventPriority.NORMAL)
+    @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
-        UUID uuid = player.getUniqueId();
-        plugin.getHeartManager().saveAllHearts();
+        SpawnCommand spawnCommand = new SpawnCommand(plugin);
+        spawnCommand.cancelTeleport(player);
     }
 }

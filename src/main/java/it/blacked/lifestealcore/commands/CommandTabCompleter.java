@@ -31,11 +31,13 @@ public class CommandTabCompleter implements TabCompleter {
             if (args.length == 1) {
                 completions.add("help");
                 completions.add("buy");
+                completions.add("spawn");
                 return filterCompletions(completions, args[0]);
             }
         } else if (command.getName().equalsIgnoreCase("lifecoreadmin")) {
             if (args.length == 1) {
                 completions.add("help");
+                completions.add("setspawn");
                 completions.add("heart");
                 return filterCompletions(completions, args[0]);
             } else if (args.length == 2 && args[0].equalsIgnoreCase("heart")) {

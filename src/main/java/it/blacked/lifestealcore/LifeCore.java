@@ -1,15 +1,8 @@
 package it.blacked.lifestealcore;
 
-import it.blacked.lifestealcore.commands.LifeCoreAdminCommand;
-import it.blacked.lifestealcore.commands.LifeCoreCommand;
-import it.blacked.lifestealcore.events.InventoryClickListener;
-import it.blacked.lifestealcore.events.PlayerDeathListener;
-import it.blacked.lifestealcore.events.PlayerInteractListener;
-import it.blacked.lifestealcore.events.PlayerJoinQuitListener;
-import it.blacked.lifestealcore.events.PlayerMoveListener;
-import it.blacked.lifestealcore.managers.BanManager;
-import it.blacked.lifestealcore.managers.ConfigManager;
-import it.blacked.lifestealcore.managers.HeartManager;
+import it.blacked.lifestealcore.commands.*;
+import it.blacked.lifestealcore.events.*;
+import it.blacked.lifestealcore.managers.*;
 import it.blacked.lifestealcore.placeholders.LifeCoreExpansion;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
@@ -23,39 +16,54 @@ public final class LifeCore extends JavaPlugin {
     private static HeartManager heartManager;
     private static BanManager banManager;
     private static Economy economy;
+    private SpawnManager spawnManager;
+    private static RTPManager rtpManager;
 
     @Override
     public void onEnable() {
         instance = this;
-
         this.configManager = new ConfigManager(this);
-        this.configManager.loadConfig();
-
         if (configManager.isEconomyEnabled() && !setupEconomy()) {
             getLogger().severe("Vault non trovato.");
         }
-
+        this.spawnManager = new SpawnManager(this);
         this.heartManager = new HeartManager(this);
         this.banManager = new BanManager(this);
-
+        this.rtpManager = new RTPManager(this);
+        getServer().getPluginManager().registerEvents(new RTPInventoryClickListener(this), this);
         registerCommands();
         registerEvents();
         registerPlaceholders();
-
         getLogger().info("LifeCore v" + getDescription().getVersion() + " Enabled!");
     }
 
+    @Override
+    public void onDisable() {
+        if (rtpManager != null) {
+            rtpManager.cleanup();
+        }
+        getLogger().info("LifeCore v" + getDescription().getVersion() + " Disabled!");
+    }
+
     private void registerCommands() {
-        getCommand("lifecore").setExecutor(new LifeCoreCommand(this));
         getCommand("lifecoreadmin").setExecutor(new LifeCoreAdminCommand(this));
+        getCommand("spawn").setExecutor(new SpawnCommand(this));
+        getCommand("setspawn").setExecutor(new SetSpawnCommand(this));
+        getCommand("rtp").setExecutor(new RTPCommand(this, configManager));
+        getCommand("randomtp").setExecutor(new RTPCommand(this, configManager));
+        getCommand("wild").setExecutor(new RTPCommand(this, configManager));
     }
 
     private void registerEvents() {
         getServer().getPluginManager().registerEvents(new PlayerDeathListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerJoinQuitListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerMoveListener(this), this);
-        getServer().getPluginManager().registerEvents(new InventoryClickListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerInteractListener(this), this);
+        getServer().getPluginManager().registerEvents(new PlayerBannedListener(this), this);
+        getServer().getPluginManager().registerEvents(new PlayerRTPListener(this, configManager), this);
+        getServer().getPluginManager().registerEvents(new PlayerSpawnListener(this, configManager), this);
+        getServer().getPluginManager().registerEvents(new InventoryClickListener(this), this);
+        getServer().getPluginManager().registerEvents(new BanListener(this), this);
     }
 
     private void registerPlaceholders() {
@@ -68,12 +76,10 @@ public final class LifeCore extends JavaPlugin {
         if (getServer().getPluginManager().getPlugin("Vault") == null) {
             return false;
         }
-
         RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
         if (rsp == null) {
             return false;
         }
-
         economy = rsp.getProvider();
         return economy != null;
     }
@@ -96,5 +102,13 @@ public final class LifeCore extends JavaPlugin {
 
     public static Economy getEconomy() {
         return economy;
+    }
+
+    public SpawnManager getSpawnManager() {
+        return spawnManager;
+    }
+
+    public static RTPManager getRtpManager() {
+        return rtpManager;
     }
 }

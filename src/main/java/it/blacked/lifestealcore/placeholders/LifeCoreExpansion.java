@@ -56,7 +56,7 @@ public class LifeCoreExpansion extends PlaceholderExpansion {
 
         if (params.equalsIgnoreCase("ban_time")) {
             if (plugin.getBanManager().isPlayerBanned(player.getUniqueId())) {
-                return plugin.getBanManager().getRemainingBanTime(player.getUniqueId());
+                return String.valueOf(plugin.getBanManager().getRemainingBanTime(player.getUniqueId()));
             }
             return "0";
         }

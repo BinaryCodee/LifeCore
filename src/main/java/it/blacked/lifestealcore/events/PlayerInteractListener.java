@@ -23,9 +23,14 @@ public class PlayerInteractListener implements Listener {
     @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerInteract(PlayerInteractEvent event) {
         Player player = event.getPlayer();
-        ItemStack item = event.getItem();
 
-        // Check for right click with heart item
+        if (plugin.getBanManager().isPlayerBanned(player.getUniqueId())) {
+            player.sendMessage(plugin.getConfigManager().getMessage("banned_heart_redeem_blocked"));
+            event.setCancelled(true);
+            return;
+        }
+
+        ItemStack item = event.getItem();
         if (event.getAction() != Action.RIGHT_CLICK_AIR && event.getAction() != Action.RIGHT_CLICK_BLOCK) {
             return;
         }
