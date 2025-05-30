@@ -22,3 +22,9 @@ commands:
     description: Teleport player to random position
   wild:
     description: Teleport player to random position
+  shop:
+    description: Open player Shop
+  stats:
+    description: Show ur or other player stats
+  ping:
+    description: View ur or other player's ping

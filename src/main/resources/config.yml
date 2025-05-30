@@ -16,6 +16,12 @@ messages:
   heart_gained: "&aHai guadagnato &c%hearts% cuore(i) &auccidendo &f%victim%&a!"
   heart_lost: "&cHai perso &c%hearts% cuore(i) &cper essere stato ucciso da &f%killer%&c!"
   heart_lost_suicide: "&cHai perso &c%hearts% cuore(i) &cper esserti suicidato!"
+  shop_buy_success: "&aHai acquistato %quantity% %item%&e!"
+  shop_sell_success: "&aHai venduto %quantity% %item%&e!"
+  shop_not_enough_money: "&cNon hai abbastanza soldi."
+  shop_not_enough_items: "&cNon hai abbastanza items da vendere."
+  shop_inventory_full: "&cIl tuo inventario è pieno."
+  shop_invalid_quantity: "&cSeleziona una quantità valida."
   suicide_warning: "&cAttenzione: Se ti uccidi altre %remaining% volte, verrai bannato!"
   suicide_banned: "&cSei stato bannato per esserti ucciso troppe volte da solo!"
   heart_bought: "&aHai acquistato con successo &c1 cuore&a!"
@@ -65,6 +71,11 @@ messages:
   help_command: "&c/lifecore help &8- &7Mostra tutti i comandi per gli utenti"
   buy_command: "&c/lifecore buy &8- &7Apri il menu della lifesteal"
   spawn_command: "&c/spawn &8- &7Vai allo spawn del server"
+  stats_command: "&c/stats [player] &8- &7Mostra le statistiche di un giocatore"
+  stats_self: "&a&lLe tue Statistiche:\n&7Cuori: &c%hearts%\n&7Uccisioni: &e%kills%\n&7Morti: &e%deaths%\n&7Soldi: &a$%balance%"
+  stats_other: "&a&lStatistiche di %player%:\n&7Cuori: &c%hearts%\n&7Uccisioni: &e%kills%\n&7Morti: &e%deaths%\n&7Soldi: &a$%balance%"
+  ping_self: "&7Il tuo ping è: %ping_color%%ping%ms"
+  ping_other: "&7Il ping di &e%player% &7è: %ping_color%%ping%ms"
   admin_help_command: "&c/lifecoreadmin &8- &7Mostra tutti i comandi per gli admin"
   admin_help_header: "&c&lLIFESTEAL &7- &6&lCOMANDI ADMIN"
   admin_help_heart_add: "&c/lifelongadmin heart add %player% %amount% &8- &7Aggiungi i cuori ad un giocatore"
@@ -75,6 +86,7 @@ messages:
   admin_help_setspawn: "&c/lifecoreadmin setspawn &8- &7Imposta lo spawn del server"
   admin_help_reload: "&c/lifecoreadmin reload &8- &7Ricarica la configurazione del plugin"
   admin_help_footer: "&a"
+  reload_success: "&aHai ricaricato con successo il config.yml&e!"
 
 settings:
   max_hearts: 30
@@ -101,6 +113,508 @@ settings:
   ban_freeze_message_enabled: true
   ban-block-commands: true
   ban-chat-format: true
+
+shop:
+  main:
+    title: '&2&lSHOP'
+    size: 36
+    items:
+      farming:
+        slot: 11
+        material: WHEAT
+        name: '&6&lFarming'
+      mob_drops:
+        slot: 13
+        material: ROTTEN_FLESH
+        name: '&c&lMobs Drops'
+      materials:
+        slot: 15
+        material: GOLD_INGOT
+        name: '&3&lMateriali'
+      generals:
+        slot: 21
+        material: LAVA_BUCKET
+        name: '&b&lGenerali'
+      tools:
+        slot: 23
+        material: DIAMOND_PICKAXE
+        name: '&5&lTools'
+  categories:
+    farming:
+      size: 54
+      items:
+        wheat_seeds:
+          slot: 10
+          material: WHEAT_SEEDS
+          buy: 10
+          sell: 2.5
+        wheat:
+          slot: 11
+          material: WHEAT
+          buy: 64
+          sell: 16
+        carrot:
+          slot: 12
+          material: CARROT
+          buy: 64
+          sell: 16
+        potato:
+          slot: 13
+          material: POTATO
+          buy: 64
+          sell: 16
+        beetroot_seeds:
+          slot: 14
+          material: BEETROOT_SEEDS
+          buy: 10
+          sell: 2.5
+        beetroot:
+          slot: 15
+          material: BEETROOT
+          buy: 64
+          sell: 16
+        sweet_berries:
+          slot: 16
+          material: SWEET_BERRIES
+          buy: 12
+          sell: 3
+        pumpkin_seeds:
+          slot: 19
+          material: PUMPKIN_SEEDS
+          buy: 25
+          sell: 5
+        pumpkin:
+          slot: 20
+          material: PUMPKIN
+          buy: 512
+          sell: 320
+        melon_seeds:
+          slot: 21
+          material: MELON_SEEDS
+          buy: 25
+          sell: 5
+        melon:
+          slot: 22
+          material: MELON
+          buy: 512
+          sell: 192
+        melon_slice:
+          slot: 23
+          material: MELON_SLICE
+          buy: 64
+          sell: 16
+        bamboo:
+          slot: 24
+          material: BAMBOO
+          buy: 12
+          sell: 3
+        sugar_cane:
+          slot: 25
+          material: SUGAR_CANE
+          buy: 384
+          sell: 128
+        cactus:
+          slot: 28
+          material: CACTUS
+          buy: 512
+          sell: 256
+        red_mushroom:
+          slot: 29
+          material: RED_MUSHROOM
+          buy: 15
+          sell: 3.75
+        brown_mushroom:
+          slot: 30
+          material: BROWN_MUSHROOM
+          buy: 15
+          sell: 3.75
+        nether_wart:
+          slot: 31
+          material: NETHER_WART
+          buy: 12
+          sell: 3
+        cocoa_beans:
+          slot: 32
+          material: COCOA_BEANS
+          buy: 10
+          sell: 2.5
+        apple:
+          slot: 33
+          material: APPLE
+          buy: 15
+          sell: 5
+        poppy:
+          slot: 34
+          material: POPPY
+          buy: 15
+          sell: 3
+    mob_drops:
+      size: 54
+      pages:
+        '1':
+          items:
+            raw_beef:
+              slot: 0
+              material: BEEF
+              buy: 30
+              sell: 8
+            steak:
+              slot: 1
+              material: COOKED_BEEF
+              buy: 60
+              sell: 8
+            raw_porkchop:
+              slot: 2
+              material: PORKCHOP
+              buy: 30
+              sell: 8
+            cooked_porkchop:
+              slot: 3
+              material: COOKED_PORKCHOP
+              buy: 60
+              sell: 4
+            raw_mutton:
+              slot: 4
+              material: MUTTON
+              buy: 30
+              sell: 7
+            cooked_mutton:
+              slot: 5
+              material: COOKED_MUTTON
+              buy: 60
+              sell: 15
+            raw_chicken:
+              slot: 6
+              material: CHICKEN
+              buy: 30
+              sell: 5
+            cooked_chicken:
+              slot: 7
+              material: COOKED_CHICKEN
+              buy: 60
+              sell: 5
+            raw_rabbit:
+              slot: 8
+              material: RABBIT
+              buy: 30
+              sell: 8
+            cooked_rabbit:
+              slot: 9
+              material: COOKED_RABBIT
+              buy: 60
+              sell: 16
+            leather:
+              slot: 10
+              material: LEATHER
+              buy: 40
+              sell: 16
+            feather:
+              slot: 11
+              material: FEATHER
+              buy: 12
+              sell: 2
+            rotten_flesh:
+              slot: 12
+              material: ROTTEN_FLESH
+              buy: 150
+              sell: 40
+            bone:
+              slot: 13
+              material: BONE
+              buy: 100
+              sell: 30
+            arrow:
+              slot: 14
+              material: ARROW
+              buy: 150
+              sell: 30
+            string:
+              slot: 15
+              material: STRING
+              buy: 80
+              sell: 8
+            spider_eye:
+              slot: 16
+              material: SPIDER_EYE
+              buy: 200
+              sell: 10
+            gunpowder:
+              slot: 17
+              material: GUNPOWDER
+              buy: 300
+              sell: 65
+            blazerod:
+              slot: 18
+              material: BLAZE_ROD
+              buy: 230
+              sell: 50
+            magma_cream:
+              slot: 19
+              material: MAGMA_CREAM
+              buy: 160
+              sell: 30
+            slimeball:
+              slot: 20
+              material: SLIME_BALL
+              buy: 160
+              sell: 30
+            ghast_tear:
+              slot: 21
+              material: GHAST_TEAR
+              buy: 320
+              sell: 80
+            raw_cod:
+              slot: 22
+              material: COD
+              buy: 30
+              sell: 8
+            cooked_cod:
+              slot: 23
+              material: COOKED_COD
+              buy: 60
+              sell: 15
+            raw_salmon:
+              slot: 24
+              material: SALMON
+              buy: 30
+              sell: 8
+            cooked_salmon:
+              slot: 25
+              material: COOKED_SALMON
+              buy: 60
+              sell: 15
+            pufferfish:
+              slot: 26
+              material: PUFFERFISH
+              sell: 150
+            tropical_fish:
+              slot: 29
+              material: TROPICAL_FISH
+              buy: 120
+              sell: 30
+            enderpearl:
+              slot: 30
+              material: ENDER_PEARL
+              buy: 600
+              sell: 180
+            rabbit_foot:
+              slot: 31
+              material: RABBIT_FOOT
+              buy: 70
+              sell: 35
+            rabbit_hide:
+              slot: 32
+              material: RABBIT_HIDE
+              buy: 10
+              sell: 5
+            ink_sac:
+              slot: 33
+              material: INK_SAC
+              buy: 50
+              sell: 15
+    materials:
+      size: 54
+      items:
+        copper_ingot:
+          slot: 10
+          material: COPPER_INGOT
+          buy: 200
+          sell: 50
+        coal:
+          slot: 11
+          material: COAL
+          buy: 300
+          sell: 80
+        iron_ingot:
+          slot: 12
+          material: IRON_INGOT
+          buy: 600
+          sell: 200
+        redstone_dust:
+          slot: 13
+          material: REDSTONE
+          buy: 600
+          sell: 150
+        lapis_lazuli:
+          slot: 14
+          material: LAPIS_LAZULI
+          buy: 600
+          sell: 150
+        gold_ingot:
+          slot: 15
+          material: GOLD_INGOT
+          buy: 1000
+          sell: 400
+        diamond:
+          slot: 16
+          material: DIAMOND
+          buy: 3000
+          sell: 1200
+        block_of_copper:
+          slot: 19
+          material: COPPER_BLOCK
+          buy: 2000
+          sell: 500
+        block_of_coal:
+          slot: 20
+          material: COAL_BLOCK
+          buy: 3000
+          sell: 700
+        block_of_iron:
+          slot: 21
+          material: IRON_BLOCK
+          buy: 6000
+          sell: 2000
+        block_of_redstone:
+          slot: 22
+          material: REDSTONE_BLOCK
+          buy: 5000
+          sell: 1200
+        block_of_lapis_lazuli:
+          slot: 23
+          material: LAPIS_BLOCK
+          buy: 5500
+          sell: 1500
+        block_of_gold:
+          slot: 24
+          material: GOLD_BLOCK
+          buy: 8000
+          sell: 2000
+        block_of_diamond:
+          slot: 25
+          material: DIAMOND_BLOCK
+          buy: 30000
+          sell: 8000
+        emerald:
+          slot: 30
+          material: EMERALD
+          buy: 3000
+          sell: 1000
+        netherite_ingot:
+          slot: 32
+          material: NETHERITE_INGOT
+          buy: 5500
+          sell: 1500
+        block_of_emerald:
+          slot: 39
+          material: EMERALD_BLOCK
+          buy: 25000
+          sell: 2000
+        block_of_netherite:
+          slot: 41
+          material: NETHERITE_BLOCK
+          buy: 60000
+          sell: 25000
+    generals:
+      size: 54
+      items:
+        glowstone_dust:
+          slot: 9
+          material: GLOWSTONE_DUST
+          buy: 80
+          sell: 20
+        saddle:
+          slot: 10
+          material: SADDLE
+          buy: 500
+          sell: 100
+        flint:
+          slot: 11
+          material: FLINT
+          buy: 500
+          sell: 30
+        golden_apple:
+          slot: 12
+          material: GOLDEN_APPLE
+          buy: 5000
+        cobblestone:
+          slot: 13
+          material: COBBLESTONE
+          buy: 10
+          sell: 3
+        netherite_upgrade:
+          slot: 14
+          material: NETHERITE_UPGRADE_SMITHING_TEMPLATE
+          buy: 5000
+        oak_log:
+          slot: 15
+          material: OAK_LOG
+          buy: 50
+          sell: 5
+        spruce_log:
+          slot: 16
+          material: SPRUCE_LOG
+          buy: 50
+          sell: 5
+        birch_log:
+          slot: 17
+          material: BIRCH_LOG
+          buy: 50
+          sell: 5
+        jungle_log:
+          slot: 20
+          material: JUNGLE_LOG
+          buy: 50
+          sell: 5
+        acacia_log:
+          slot: 21
+          material: ACACIA_LOG
+          buy: 50
+          sell: 5
+        dark_oak_log:
+          slot: 22
+          material: DARK_OAK_LOG
+          buy: 50
+          sell: 5
+        mangrove_log:
+          slot: 23
+          material: MANGROVE_LOG
+          buy: 50
+          sell: 5
+        cherry_log:
+          slot: 24
+          material: CHERRY_LOG
+          buy: 50
+          sell: 5
+    tools:
+      size: 36
+      items:
+        diamond_pickaxe:
+          slot: 11
+          material: DIAMOND_PICKAXE
+          name: '&7Diamond Pickaxe'
+          buy: 7500
+          sell: 2000
+        diamond_axe:
+          slot: 12
+          material: DIAMOND_AXE
+          name: '&7Diamond Axe'
+          buy: 6000
+          sell: 1500
+        diamond_shovel:
+          slot: 13
+          material: DIAMOND_SHOVEL
+          name: '&7Diamond Shovel'
+          buy: 4000
+          sell: 1000
+        diamond_hoe:
+          slot: 14
+          material: DIAMOND_HOE
+          name: '&7Diamond Hoe'
+          buy: 4000
+          sell: 1000
+        fishing_rod:
+          slot: 15
+          material: FISHING_ROD
+          name: '&7Fishing Rod'
+          buy: 2000
+          sell: 500
+  transaction:
+    buy_title: "&aAcquista %item%"
+    sell_title: "&cVendi %item%"
+    confirm: "&aConferma"
+    cancel: "&cAnnulla"
+    quantity: "&eQuantità: %item%"
 
 rtp:
   enabled: true

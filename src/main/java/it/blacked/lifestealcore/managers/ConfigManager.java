@@ -62,6 +62,9 @@ public class ConfigManager {
     private Map<String, Object> rtpFillItem;
     private int rtpMenuRows;
     private Map<String, Map<String, Object>> rtpWorldsConfig;
+    private Map<String, Map<String, Object>> shopCategories = new HashMap<>();
+    private Map<String, Object> shopMainConfig = new HashMap<>();
+    private Map<Integer, String> mainShopSlots = new HashMap<>();
 
     public ConfigManager(LifeCore plugin) {
         this.plugin = plugin;
@@ -71,6 +74,10 @@ public class ConfigManager {
 
     public static ConfigManager getConfigManager() {
         return configManager;
+    }
+
+    public Map<String, Object> getShopMainConfig() {
+        return shopMainConfig;
     }
 
     public static RTPManager getRtpManager() {
@@ -97,14 +104,87 @@ public class ConfigManager {
         loadSpawnSettings();
         loadBanSettings();
         loadRtpSettings();
+        loadShopSettings();
     }
 
     private void loadMessages() {
         if (config.getConfigurationSection("messages") != null) {
             for (String key : config.getConfigurationSection("messages").getKeys(false)) {
-                messages.put(key, ChatColor.translateAlternateColorCodes('&', config.getString("messages." + key)));
+                String message = config.getString("messages." + key);
+                if (message != null) {
+                    messages.put(key, ChatColor.translateAlternateColorCodes('&', message));
+                }
             }
         }
+    }
+
+    private void loadShopSettings() {
+        String mainPath = "shop.main";
+        shopMainConfig.put("title", config.getString(mainPath + ".title", "&2&lSHOP"));
+        shopMainConfig.put("size", config.getInt(mainPath + ".size", 36));
+        if (config.getConfigurationSection(mainPath + ".items") != null) {
+            for (String key : config.getConfigurationSection(mainPath + ".items").getKeys(false)) {
+                Map<String, Object> itemConfig = new HashMap<>();
+                String itemPath = mainPath + ".items." + key;
+                itemConfig.put("slot", config.getInt(itemPath + ".slot"));
+                itemConfig.put("material", config.getString(itemPath + ".material"));
+                itemConfig.put("name", config.getString(itemPath + ".name"));
+                shopMainConfig.put(key, itemConfig);
+                mainShopSlots.put((int) itemConfig.get("slot"), key);
+            }
+        }
+        if (config.getConfigurationSection("shop.categories") != null) {
+            for (String category : config.getConfigurationSection("shop.categories").getKeys(false)) {
+                Map<String, Object> categoryConfig = new HashMap<>();
+                String catPath = "shop.categories." + category;
+                categoryConfig.put("size", config.getInt(catPath + ".size", 54));
+                if (config.getConfigurationSection(catPath + ".pages") != null) {
+                    Map<Integer, Map<String, Object>> pages = new HashMap<>();
+                    for (String pageStr : config.getConfigurationSection(catPath + ".pages").getKeys(false)) {
+                        int page = Integer.parseInt(pageStr);
+                        Map<String, Object> pageConfig = new HashMap<>();
+                        String pagePath = catPath + ".pages." + page + ".items";
+                        if (config.getConfigurationSection(pagePath) != null) {
+                            for (String itemKey : config.getConfigurationSection(pagePath).getKeys(false)) {
+                                Map<String, Object> itemConfig = new HashMap<>();
+                                String itemPath = pagePath + "." + itemKey;
+                                itemConfig.put("slot", config.getInt(itemPath + ".slot"));
+                                itemConfig.put("material", config.getString(itemPath + ".material"));
+                                itemConfig.put("buy", config.getDouble(itemPath + ".buy", -1));
+                                itemConfig.put("sell", config.getDouble(itemPath + ".sell", -1));
+                                pageConfig.put(itemKey, itemConfig);
+                            }
+                        }
+                        pages.put(page, pageConfig);
+                    }
+                    categoryConfig.put("pages", pages);
+                } else {
+                    Map<String, Object> items = new HashMap<>();
+                    String itemsPath = catPath + ".items";
+                    if (config.getConfigurationSection(itemsPath) != null) {
+                        for (String itemKey : config.getConfigurationSection(itemsPath).getKeys(false)) {
+                            Map<String, Object> itemConfig = new HashMap<>();
+                            String itemPath = itemsPath + "." + itemKey;
+                            itemConfig.put("slot", config.getInt(itemPath + ".slot"));
+                            itemConfig.put("material", config.getString(itemPath + ".material"));
+                            itemConfig.put("buy", config.getDouble(itemPath + ".buy", -1));
+                            itemConfig.put("sell", config.getDouble(itemPath + ".sell", -1));
+                            items.put(itemKey, itemConfig);
+                        }
+                    }
+                    categoryConfig.put("items", items);
+                }
+                shopCategories.put(category, categoryConfig);
+            }
+        }
+    }
+
+    public Map<String, Map<String, Object>> getShopCategories() {
+        return shopCategories;
+    }
+
+    public String getCategoryFromSlot(int slot) {
+        return mainShopSlots.get(slot);
     }
 
     private void loadSettings() {
@@ -478,5 +558,9 @@ public class ConfigManager {
     public Object getConfigValue(String path, Object defaultValue) {
         Object value = config.get(path, defaultValue);
         return value != null ? value : defaultValue;
+    }
+
+    public FileConfiguration getConfig() {
+        return config;
     }
 }

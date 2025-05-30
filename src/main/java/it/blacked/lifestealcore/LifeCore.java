@@ -46,16 +46,21 @@ public final class LifeCore extends JavaPlugin {
     }
 
     private void registerCommands() {
+        getCommand("lifecore").setExecutor(new LifeCoreCommand(this));
         getCommand("lifecoreadmin").setExecutor(new LifeCoreAdminCommand(this));
         getCommand("spawn").setExecutor(new SpawnCommand(this));
         getCommand("setspawn").setExecutor(new SetSpawnCommand(this));
         getCommand("rtp").setExecutor(new RTPCommand(this, configManager));
         getCommand("randomtp").setExecutor(new RTPCommand(this, configManager));
         getCommand("wild").setExecutor(new RTPCommand(this, configManager));
+        getCommand("shop").setExecutor(new ShopCommand(this));
+        getCommand("stats").setExecutor(new StatsCommand(this));
+        getCommand("ping").setExecutor(new PingCommand(this));
     }
 
     private void registerEvents() {
         getServer().getPluginManager().registerEvents(new PlayerDeathListener(this), this);
+        getServer().getPluginManager().registerEvents(new PlayerStatsDeathListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerJoinQuitListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerMoveListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerInteractListener(this), this);
@@ -63,6 +68,7 @@ public final class LifeCore extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerRTPListener(this, configManager), this);
         getServer().getPluginManager().registerEvents(new PlayerSpawnListener(this, configManager), this);
         getServer().getPluginManager().registerEvents(new InventoryClickListener(this), this);
+        getServer().getPluginManager().registerEvents(new ShopInventoryClickListener(this), this);
         getServer().getPluginManager().registerEvents(new BanListener(this), this);
     }
 
