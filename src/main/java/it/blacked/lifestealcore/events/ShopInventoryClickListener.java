@@ -13,6 +13,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.inventory.Inventory;
@@ -44,6 +45,8 @@ public class ShopInventoryClickListener implements Listener {
         Player player = (Player) event.getWhoClicked();
         int slot = event.getSlot();
         ItemStack clickedItem = event.getCurrentItem();
+        ClickType clickType = event.getClick();
+
         if (holder instanceof MainShopHolder || holder instanceof CategoryHolder || holder instanceof TransactionHolder) {
             event.setCancelled(true);
         } else {
@@ -88,7 +91,9 @@ public class ShopInventoryClickListener implements Listener {
                                 double sell = (double) itemConfig.getOrDefault("sell", -1.0);
                                 String displayName = (String) itemConfig.get("name");
                                 TransactionMenu transactionMenu = new TransactionMenu(plugin);
-                                Inventory transactionInv = transactionMenu.createTransactionInventory(itemKey, material, displayName, buy, sell, buy >= 0, 0);
+                                boolean isBuy = clickType == ClickType.LEFT;
+                                Inventory transactionInv = transactionMenu.createTransactionInventory(
+                                        itemKey, material, displayName, buy, sell, isBuy, 0);
                                 player.openInventory(transactionInv);
                                 break;
                             }

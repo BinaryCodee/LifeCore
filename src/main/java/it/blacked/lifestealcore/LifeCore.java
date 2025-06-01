@@ -4,6 +4,7 @@ import it.blacked.lifestealcore.commands.*;
 import it.blacked.lifestealcore.events.*;
 import it.blacked.lifestealcore.managers.*;
 import it.blacked.lifestealcore.placeholders.LifeCoreExpansion;
+import it.blacked.lifestealcore.placeholders.TeamsExpansion;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -18,6 +19,7 @@ public final class LifeCore extends JavaPlugin {
     private static Economy economy;
     private SpawnManager spawnManager;
     private static RTPManager rtpManager;
+    private static TeamsManager teamsManager;
 
     @Override
     public void onEnable() {
@@ -30,6 +32,7 @@ public final class LifeCore extends JavaPlugin {
         this.heartManager = new HeartManager(this);
         this.banManager = new BanManager(this);
         this.rtpManager = new RTPManager(this);
+        this.teamsManager = new TeamsManager(this);
         getServer().getPluginManager().registerEvents(new RTPInventoryClickListener(this), this);
         registerCommands();
         registerEvents();
@@ -56,6 +59,9 @@ public final class LifeCore extends JavaPlugin {
         getCommand("shop").setExecutor(new ShopCommand(this));
         getCommand("stats").setExecutor(new StatsCommand(this));
         getCommand("ping").setExecutor(new PingCommand(this));
+        getCommand("sellgui").setExecutor(new SellGuiCommand(this));
+        getCommand("teams").setExecutor(new TeamsCommand(this));
+        getCommand("teamsadmin").setExecutor(new TeamsAdminCommand(this));
     }
 
     private void registerEvents() {
@@ -69,12 +75,17 @@ public final class LifeCore extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerSpawnListener(this, configManager), this);
         getServer().getPluginManager().registerEvents(new InventoryClickListener(this), this);
         getServer().getPluginManager().registerEvents(new ShopInventoryClickListener(this), this);
+        getServer().getPluginManager().registerEvents(new CreativeDestroySlotListener(), this);
+        getServer().getPluginManager().registerEvents(new SellGuiListener(this), this);
         getServer().getPluginManager().registerEvents(new BanListener(this), this);
+        getServer().getPluginManager().registerEvents(new TeamsPlayerListener(this), this);
+        getServer().getPluginManager().registerEvents(new TeamsChatListener(this), this);
     }
 
     private void registerPlaceholders() {
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             new LifeCoreExpansion(this).register();
+            new TeamsExpansion(this, teamsManager).register();
         }
     }
 
@@ -116,5 +127,9 @@ public final class LifeCore extends JavaPlugin {
 
     public static RTPManager getRtpManager() {
         return rtpManager;
+    }
+
+    public static TeamsManager getTeamsManager() {
+        return teamsManager;
     }
 }

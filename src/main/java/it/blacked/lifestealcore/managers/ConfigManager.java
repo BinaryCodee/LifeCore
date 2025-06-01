@@ -65,6 +65,12 @@ public class ConfigManager {
     private Map<String, Map<String, Object>> shopCategories = new HashMap<>();
     private Map<String, Object> shopMainConfig = new HashMap<>();
     private Map<Integer, String> mainShopSlots = new HashMap<>();
+    private int maxTeamHomes;
+    private int maxTeamMembers;
+    private boolean teamsEnabled;
+    private boolean teamFriendlyFire;
+    private boolean teamChatEnabled;
+    private boolean allyChatEnabled;
 
     public ConfigManager(LifeCore plugin) {
         this.plugin = plugin;
@@ -95,7 +101,7 @@ public class ConfigManager {
         }
         plugin.reloadConfig();
         this.config = plugin.getConfig();
-        this.rtpMenuRows = config.getInt("rt.pmenu.rows", 3);
+        this.rtpMenuRows = config.getInt("rtp.menu.rows", 3);
         loadMessages();
         loadSettings();
         loadEconomySettings();
@@ -105,6 +111,7 @@ public class ConfigManager {
         loadBanSettings();
         loadRtpSettings();
         loadShopSettings();
+        loadTeamSettings();
     }
 
     private void loadMessages() {
@@ -179,12 +186,13 @@ public class ConfigManager {
         }
     }
 
-    public Map<String, Map<String, Object>> getShopCategories() {
-        return shopCategories;
-    }
-
-    public String getCategoryFromSlot(int slot) {
-        return mainShopSlots.get(slot);
+    private void loadTeamSettings() {
+        this.maxTeamHomes = config.getInt("teams.max_homes", 5);
+        this.maxTeamMembers = config.getInt("teams.max_members", 20);
+        this.teamsEnabled = config.getBoolean("teams.enabled", true);
+        this.teamFriendlyFire = config.getBoolean("teams.friendly_fire", false);
+        this.teamChatEnabled = config.getBoolean("teams.chat_enabled", true);
+        this.allyChatEnabled = config.getBoolean("teams.ally_chat_enabled", true);
     }
 
     private void loadSettings() {
@@ -562,5 +570,37 @@ public class ConfigManager {
 
     public FileConfiguration getConfig() {
         return config;
+    }
+
+    public int getMaxTeamHomes() {
+        return maxTeamHomes;
+    }
+
+    public int getMaxTeamMembers() {
+        return maxTeamMembers;
+    }
+
+    public boolean isTeamsEnabled() {
+        return teamsEnabled;
+    }
+
+    public boolean isTeamFriendlyFire() {
+        return teamFriendlyFire;
+    }
+
+    public boolean isTeamChatEnabled() {
+        return teamChatEnabled;
+    }
+
+    public boolean isAllyChatEnabled() {
+        return allyChatEnabled;
+    }
+
+    public Map<String, Map<String, Object>> getShopCategories() {
+        return shopCategories;
+    }
+
+    public String getCategoryFromSlot(int slot) {
+        return mainShopSlots.get(slot);
     }
 }

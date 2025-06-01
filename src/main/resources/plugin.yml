@@ -12,6 +12,10 @@ commands:
   lifecoreadmin:
     description: Admin command for LifeCore
     aliases: [lca]
+  teams:
+    description: Team command
+  teamsadmin:
+    description: Team admin command
   spawn:
     description: Teleport player to Spawn
   setspawn:
@@ -24,6 +28,8 @@ commands:
     description: Teleport player to random position
   shop:
     description: Open player Shop
+  sellgui:
+    description: Open player Sell Gui
   stats:
     description: Show ur or other player stats
   ping:

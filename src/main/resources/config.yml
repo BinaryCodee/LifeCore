@@ -16,12 +16,14 @@ messages:
   heart_gained: "&aHai guadagnato &c%hearts% cuore(i) &auccidendo &f%victim%&a!"
   heart_lost: "&cHai perso &c%hearts% cuore(i) &cper essere stato ucciso da &f%killer%&c!"
   heart_lost_suicide: "&cHai perso &c%hearts% cuore(i) &cper esserti suicidato!"
-  shop_buy_success: "&aHai acquistato %quantity% %item%&e!"
-  shop_sell_success: "&aHai venduto %quantity% %item%&e!"
+  shop_buy_success: "&aHai acquistato %quantity% %item% per &a$%price% &e!"
+  shop_sell_success: "&aHai venduto %quantity% %item% per &a$%price% &e!"
   shop_not_enough_money: "&cNon hai abbastanza soldi."
   shop_not_enough_items: "&cNon hai abbastanza items da vendere."
   shop_inventory_full: "&cIl tuo inventario è pieno."
   shop_invalid_quantity: "&cSeleziona una quantità valida."
+  shop_sell_gui_title: "&c&lVendi Oggetti"
+  shop_item_not_sellable: "&cQuesto oggetto non può essere venduto!"
   suicide_warning: "&cAttenzione: Se ti uccidi altre %remaining% volte, verrai bannato!"
   suicide_banned: "&cSei stato bannato per esserti ucciso troppe volte da solo!"
   heart_bought: "&aHai acquistato con successo &c1 cuore&a!"
@@ -74,6 +76,94 @@ messages:
   stats_command: "&c/stats [player] &8- &7Mostra le statistiche di un giocatore"
   stats_self: "&a&lLe tue Statistiche:\n&7Cuori: &c%hearts%\n&7Uccisioni: &e%kills%\n&7Morti: &e%deaths%\n&7Soldi: &a$%balance%"
   stats_other: "&a&lStatistiche di %player%:\n&7Cuori: &c%hearts%\n&7Uccisioni: &e%kills%\n&7Morti: &e%deaths%\n&7Soldi: &a$%balance%"
+  teams_already_in_team: "&cSei già in un team!"
+  teams_not_in_team: "&cNon sei in nessun team!"
+  teams_name_taken: "&cQuesto nome del team è già in uso!"
+  teams_created: "&aTeam %team% creato con successo!"
+  teams_disbanded: "&cIl team %team% è stato sciolto!"
+  teams_no_permission: "&cNon hai il permesso per eseguire questa azione!"
+  teams_invite_received: "&aHai ricevuto un invito per unirti al team %team% da %player%!"
+  teams_invite_sent: "&aInvito inviato a %player%!"
+  teams_no_invite: "&cNon hai nessun invito in sospeso!"
+  teams_invite_denied: "&aHai rifiutato l'invito al team!"
+  teams_joined: "&a%player% si è unito al team %team%!"
+  teams_invalid_rank: "&cRank non valido! Usa: ADMIN, MOD, MEMBER"
+  teams_no_leader_promote: "&cNon puoi promuovere a LEADER!"
+  teams_no_leader_demote: "&cNon puoi retrocedere a LEADER!"
+  teams_promoted: "&a%player% è stato promosso a %rank%!"
+  teams_demoted: "&a%player% è stato retrocesso a %rank%!"
+  teams_no_kick_leader: "&cNon puoi espellere il leader!"
+  teams_kicked: "&c%player% è stato espulso dal team!"
+  teams_kicked_player: "&cSei stato espulso dal team %team%!"
+  teams_max_homes: "&cIl team ha raggiunto il limite massimo di case (%max%)!"
+  teams_home_set: "&aCasa %home% impostata con successo!"
+  teams_home_deleted: "&aCasa %home% eliminata con successo!"
+  teams_home_not_found: "&cCasa non trovata!"
+  teams_home_teleported: "&aTeletrasportato alla casa %home%!"
+  teams_no_homes: "&cIl team non ha case impostate!"
+  teams_homes_list: "&aElenco delle case del team:"
+  teams_name_changed: "&aIl nome del team è stato cambiato in %team%!"
+  teams_not_found: "&cTeam non trovato!"
+  teams_info: "&aTeam: %team% | Membri: %members% | Staff: %staff% | Online: %online% | Offline: %offline%"
+  teams_stats: "&aStatistiche di %team%: Uccisioni: %kills% | Morti: %deaths% | Serie: %streak%"
+  teams_top_header: "&aClassifica dei migliori team:"
+  teams_top_format: "&7%position%. %team% - Uccisioni: %kills%"
+  teams_position: "&aPosizione di %team%: %position%"
+  teams_already_allied: "&cSei già alleato con questo team!"
+  teams_ally_request: "&aRichiesta di alleanza ricevuta da %team%!"
+  teams_ally_request_sent: "&aRichiesta di alleanza inviata a %team%!"
+  teams_no_ally_invite: "&cNessuna richiesta di alleanza in sospeso!"
+  teams_ally_accepted: "&aAlleanza accettata con %team%!"
+  teams_ally_denied: "&aRichiesta di alleanza con %team% rifiutata!"
+  teams_not_allied: "&cNon sei alleato con questo team!"
+  teams_ally_removed: "&cAlleanza con %team% rimossa!"
+  teams_ally_stats: "&aStatistiche alleato %team%: Uccisioni: %kills% | Morti: %deaths% | Serie: %streak%"
+  teams_ally_position: "&aPosizione alleato %team%: %position%"
+  teams_chat_enabled: "&aChat del team attivata!"
+  teams_chat_disabled: "&aChat del team disattivata!"
+  teams_ally_chat_enabled: "&aChat degli alleati attivata!"
+  teams_ally_chat_disabled: "&aChat degli alleati disattivata!"
+  teams_chat_format: "&7[Team] %player%: %message%"
+  teams_ally_chat_format: "&7[Ally] %team% %player%: %message%"
+  teams_admin_reset: "&aTeam %team% resettato con successo!"
+  teams_admin_stat_set: "&aStatistica %stat% di %team% impostata a %value%!"
+  teams_help:
+    - "&aComandi Team:"
+    - "&7/teams help &8- Mostra questo messaggio"
+    - "&7/teams info [team/giocatore] &8- Mostra informazioni sul team"
+    - "&7/teams create [nome] &8- Crea un nuovo team"
+    - "&7/teams delete &8- Scioglie il tuo team"
+    - "&7/teams invite [giocatore] &8- Invita un giocatore"
+    - "&7/teams accept &8- Accetta un invito"
+    - "&7/teams deny &8- Rifiuta un invito"
+    - "&7/teams chat [messaggio] &8- Attiva/disattiva chat team o invia messaggio"
+    - "&7/teams promote [giocatore] [rank] &8- Promuovi un membro"
+    - "&7/teams demote [giocatore] [rank] &8- Retrocedi un membro"
+    - "&7/teams kick [giocatore] &8- Espelli un membro"
+    - "&7/teams sethome [nome] &8- Imposta una casa del team"
+    - "&7/teams delhome [nome] &8- Elimina una casa del team"
+    - "&7/teams home [nome] &8- Teletrasportati a una casa"
+    - "&7/teams listhome &8- Elenca le case del team"
+    - "&7/teams stats &8- Mostra statistiche del team"
+    - "&7/teams top &8- Mostra i migliori team"
+    - "&7/teams position &8- Mostra la posizione del team"
+    - "&7/teams ally add [team] &8- Richiedi un'alleanza"
+    - "&7/teams ally accept &8- Accetta un'alleanza"
+    - "&7/teams ally deny &8- Rifiuta un'alleanza"
+    - "&7/teams ally remove [team] &8- Rimuovi un'alleanza"
+    - "&7/teams ally stats [team] &8- Mostra statistiche alleato"
+    - "&7/teams ally chat [messaggio] &8- Attiva/disattiva chat alleati o invia messaggio"
+    - "&7/teams ally position [team] &8- Mostra posizione alleato"
+  teams_admin_help:
+    - "&aComandi Admin Team:"
+    - "&7/teamsadmin help &8- Mostra questo messaggio"
+    - "&7/teams create [nome] &8- Crea un team"
+    - "&7/teams delete [name] &8- Scioglie un team"
+    - "&7/teamsadmin kick [giocatore] [team] &8- Espelli un giocatore da un team"
+    - "&7/teamsadmin reset [team] &8- Resetta un team"
+    - "&7/teamsadmin ally add [team1] [team2] &8- Forza un'alleanza"
+    - "&7/teamsadmin ally remove [team1] [team2] &8- Rimuovi un'alleanza"
+    - "&7/teamsadmin setstat [team] [stat] [valore] &8- Imposta una statistica"
   ping_self: "&7Il tuo ping è: %ping_color%%ping%ms"
   ping_other: "&7Il ping di &e%player% &7è: %ping_color%%ping%ms"
   admin_help_command: "&c/lifecoreadmin &8- &7Mostra tutti i comandi per gli admin"
@@ -114,6 +204,15 @@ settings:
   ban-block-commands: true
   ban-chat-format: true
 
+teams:
+  enabled: true
+  max_homes: 5
+  max_members: 6
+  friendly_fire: false
+  chat_enabled: true
+  ally_chat_enabled: true
+
+
 shop:
   main:
     title: '&2&lSHOP'
@@ -139,6 +238,12 @@ shop:
         slot: 23
         material: DIAMOND_PICKAXE
         name: '&5&lTools'
+  transaction:
+    buy_title: "&2Acquista: &6%item%"
+    sell_title: "&cVendi: &6%item%"
+    confirm: "&aConferma"
+    cancel: "&cAnnulla"
+    quantity: "&eQuantità: %item%"
   categories:
     farming:
       size: 54
@@ -609,13 +714,6 @@ shop:
           name: '&7Fishing Rod'
           buy: 2000
           sell: 500
-  transaction:
-    buy_title: "&aAcquista %item%"
-    sell_title: "&cVendi %item%"
-    confirm: "&aConferma"
-    cancel: "&cAnnulla"
-    quantity: "&eQuantità: %item%"
-
 rtp:
   enabled: true
   cooldown: 2
@@ -798,6 +896,8 @@ gui:
 commands:
   rtp:
     permission: "lifecore.rtp.use"
+  sellgui:
+    permission: "lifecore.sellgui"
   lifecore_spawn_bypass:
     permission: "lifecore.spawn.bypass"
   lifecoreadmin:

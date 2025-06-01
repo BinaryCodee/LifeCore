@@ -81,7 +81,8 @@ public class ShopMenu {
                 if (buy >= 0) lore.add(ChatColor.GREEN + "Compra: " + buy + "$");
                 if (sell >= 0) lore.add(ChatColor.RED + "Vendi: " + sell + "$");
                 lore.add(ChatColor.GRAY + "");
-                lore.add(ChatColor.YELLOW + "Clicca per aprire il menu di transazione!");
+                lore.add(ChatColor.YELLOW + "Click-Destro per Vendere!");
+                lore.add(ChatColor.YELLOW + "Click-Sinistro per Acquistare!");
                 meta.setLore(lore);
                 item.setItemMeta(meta);
                 inv.setItem(slot, item);
