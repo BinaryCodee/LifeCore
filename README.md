@@ -1,6 +1,6 @@
 # LifeCore v1.2-NewFix
 
-**LifeCore** is a feature-rich Minecraft plugin designed for **Lifesteal** gameplay, offering a robust heart-based system, advanced team management, custom shop, random teleport (RTP), and spawn mechanics. Built for Minecraft 1.8.x to 1.21.x, it integrates with Vault for economy support and PlaceholderAPI for dynamic placeholders. With extensive customization options, LifeCore enhances survival and PvP servers with engaging mechanics for players and powerful tools for administrators.
+**LifeCore** is a feature-rich Minecraft plugin designed for **Lifesteal** gameplay, offering a robust heart-based system, advanced team management, custom shop, random teleport (RTP), and spawn mechanics. Built for Minecraft 1.21.x, it integrates with Vault for economy support and PlaceholderAPI for dynamic placeholders. With extensive customization options, LifeCore enhances survival and PvP servers with engaging mechanics for players and powerful tools for administrators.
 
 ---
 
