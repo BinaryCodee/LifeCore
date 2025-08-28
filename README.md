@@ -1083,7 +1083,7 @@ commands:
 ## Support 🛡️
 
 - **Bug Reports**: Open an issue on [GitHub](https://github.com/BinaryCodee/LifeCore/issues) with details (server version, plugin version, error logs).  
-- **Discord**: Join our Discord server for support and updates (coming soon).  
+- **Discord**: [Join our Discord](https://discord.gg/BsYQhyv99j)
 
 ---
 
